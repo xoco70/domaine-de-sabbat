@@ -1,0 +1,42 @@
+# Généré par build.py
+Options -MultiViews
+ErrorDocument 404 /404.html
+
+RewriteEngine On
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteRule ^ https://www.domainedesabbat.fr%{REQUEST_URI} [L,R=301]
+
+RewriteRule ^pr%C3%A9sentation/?$ /presentation/ [L,R=301,NE]
+RewriteRule ^présentation/?$ /presentation/ [L,R=301,NE]
+RewriteRule ^actualit%C3%A9/?$ /actualite/ [L,R=301,NE]
+RewriteRule ^actualité/?$ /actualite/ [L,R=301,NE]
+RewriteRule ^plan-d-acc%C3%A8s/?$ /plan-d-acces/ [L,R=301,NE]
+RewriteRule ^plan-d-accès/?$ /plan-d-acces/ [L,R=301,NE]
+RewriteRule ^infos-l%C3%A9gales/?$ /mentions-legales/ [L,R=301,NE]
+RewriteRule ^infos-légales/?$ /mentions-legales/ [L,R=301,NE]
+RewriteRule ^sitemap/?$ /sitemap.xml [L,R=301,NE]
+RewriteRule ^e-boutique/?$ https://boutique.domainedesabbat.fr/ [L,R=301,NE]
+RewriteRule ^visites/?$ /oenotourisme/ [L,R=301,NE]
+RewriteRule ^visite/?$ /oenotourisme/ [L,R=301,NE]
+RewriteRule ^degustation/?$ /oenotourisme/ [L,R=301,NE]
+RewriteRule ^les-vins/domaine-de-sabbat-ros%C3%A9/?$ /les-vins/domaine-de-sabbat-rose/ [L,R=301,NE]
+RewriteRule ^les-vins/domaine-de-sabbat-rosé/?$ /les-vins/domaine-de-sabbat-rose/ [L,R=301,NE]
+RewriteRule ^les-vins/cuv%C3%A9e-printemps-1900/?$ /les-vins/cuvee-printemps-1900/ [L,R=301,NE]
+RewriteRule ^les-vins/cuvée-printemps-1900/?$ /les-vins/cuvee-printemps-1900/ [L,R=301,NE]
+RewriteRule ^les-vins/mi-cari%C3%B1a/?$ /les-vins/mi-carina/ [L,R=301,NE]
+RewriteRule ^les-vins/mi-cariña/?$ /les-vins/mi-carina/ [L,R=301,NE]
+RewriteRule ^les-vins/rivesaltes-ambr%C3%A9/?$ /les-vins/rivesaltes-ambre/ [L,R=301,NE]
+RewriteRule ^les-vins/rivesaltes-ambré/?$ /les-vins/rivesaltes-ambre/ [L,R=301,NE]
+RewriteRule ^les-vins/rivesaltes-tuil%C3%A9/?$ /les-vins/rivesaltes-tuile/ [L,R=301,NE]
+RewriteRule ^les-vins/rivesaltes-tuilé/?$ /les-vins/rivesaltes-tuile/ [L,R=301,NE]
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml application/xml
+</IfModule>

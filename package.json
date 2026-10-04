@@ -1,0 +1,13 @@
+{
+  "name": "domaine-de-sabbat",
+  "private": true,
+  "description": "Site statique du Domaine de Sabbat (HTML + Tailwind CSS + JS)",
+  "scripts": {
+    "build": "python3 build.py && tailwindcss -i src/css/input.css -o dist/assets/site.css --minify",
+    "watch": "tailwindcss -i src/css/input.css -o dist/assets/site.css --watch",
+    "serve": "python3 -m http.server 8080 -d dist"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
+  }
+}
