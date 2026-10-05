@@ -34,6 +34,11 @@ jobs:
       - name: Build (HTML + Tailwind)
         run: npm run build
 
+      - name: Préfixe /<repo>/ pour les liens absolus (GitHub Pages projet)
+        run: |
+          BASE="/${GITHUB_REPOSITORY#*/}"
+          find dist -name '*.html' -print0 | xargs -0 perl -pi -e "s{\b(href|src)=\"/(?!/)}{\$1=\"$BASE/}g"
+
       - name: Custom domain + no Jekyll
         run: |
           echo "www.domainedesabbat.fr" > dist/CNAME
