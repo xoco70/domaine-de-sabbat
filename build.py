@@ -259,11 +259,17 @@ FAQ = [
     ("Combien de temps dure la visite et combien de vins sont dégustés ?",
      "L'expérience dure environ 1 h 30. Vous dégustez entre 4 et 8 vins nature et biologiques, sélectionnés pour exprimer la diversité des terroirs de Maury, Tautavel et Vingrau."),
     ("Quel est le prix de la visite-dégustation ?",
-     "La visite de cave et dégustation est proposée à partir de 15 € par personne. Le tarif exact s'affiche dans le module de réservation selon le nombre de participants."),
+     "La visite de cave et dégustation est proposée à 3 € par personne. Le tarif s'affiche dans le module de réservation."),
     ("Comment réserver et combien de personnes peuvent participer ?",
      "La réservation se fait en ligne, en quelques clics, via le module ci-dessus (réservation instantanée sur Viny'aquí). Le domaine accueille de 1 à 20 personnes par créneau, en français, anglais ou espagnol. Annulation possible jusqu'à 1 jour avant."),
     ("Peut-on acheter du vin sur place ?",
      "Oui, la vente de vin est possible au domaine à l'issue de la dégustation. Le transport jusqu'au domaine n'est pas inclus."),
+    ("Où se déroule la dégustation de vin nature ?",
+     "Directement à la cave du Domaine de Sabbat, au 24 boulevard Carnot à Latour-de-France (66720), dans la Vallée de l'Agly, à une vingtaine de kilomètres de Perpignan."),
+    ("Qu'est-ce qu'un vin nature ?",
+     "Un vin nature est issu de raisins cultivés sans produits de synthèse et vinifiés sans intrants chimiques, avec très peu ou pas de sulfites ajoutés. Au Domaine de Sabbat, plusieurs cuvées sont des vins nature, à découvrir lors de la dégustation."),
+    ("Que faire autour de Latour-de-France après la visite ?",
+     "La Vallée de l'Agly offre de nombreuses idées de sortie : villages vignerons de Maury, Tautavel et Vingrau, châteaux cathares, gorges et sentiers. Retrouvez nos suggestions dans notre guide de la Vallée de l'Agly."),
     ("La visite peut-elle être offerte ?",
      "Oui, l'expérience peut être offerte sous forme de carte cadeau sur Viny'aquí, une belle idée cadeau pour les amateurs de vins sincères."),
 ]
@@ -302,6 +308,12 @@ WINERY = {
     "geo": {"@type": "GeoCoordinates", "latitude": BIZ["lat"], "longitude": BIZ["lng"]},
     "hasMap": f"https://www.google.com/maps/search/?api=1&query={BIZ['lat']},{BIZ['lng']}",
     "areaServed": "FR",
+    "priceRange": "€€",
+    "currenciesAccepted": "EUR",
+    "knowsLanguage": ["fr", "en", "es"],
+    "knowsAbout": ["Vin nature", "Vin biologique", "Côtes du Roussillon", "Rivesaltes", "Œnotourisme", "Vallée de l'Agly"],
+    "makesOffer": {"@type": "Offer", "name": "Visite de cave et dégustation de vin nature", "url": f"{SITE}/oenotourisme/",
+                   "price": "3", "priceCurrency": "EUR"},
     "sameAs": [VINYAQUI_URL],
 }
 
@@ -414,20 +426,22 @@ def crumbs_html(crumbs):
     return f'<nav aria-label="Fil d\'Ariane" class="container-x pt-6 text-sm"><ol class="flex flex-wrap gap-2 text-ink/70">{"".join(items)}</ol></nav>'
 
 
-PAGES = []  # (url, lastmod, priority)
+PAGES = []  # (url, priority, alternates hreflang)
 
 
 def page(url, title, desc, body, crumbs=None, ld=None, og_image="/og-domaine-de-sabbat.jpg",
-         og_type="website", priority="0.7", head_extra="", noindex=False):
+         og_type="website", priority="0.7", head_extra="", noindex=False, lang="fr", alternates=None):
     crumbs = crumbs or [("Accueil", "/")]
     ld = list(ld or [])
     if len(crumbs) > 1:
         ld.append(breadcrumbs_ld(crumbs))
     full_title = title if ("Domaine de Sabbat" in title or len(title) > 42) else f"{title} | Domaine de Sabbat"
     canonical = f"{SITE}{url}"
+    alt_links = "".join(f'<link rel="alternate" hreflang="{hl}" href="{SITE}{u}">' for hl, u in (alternates or []))
+    og_locale = {"fr": "fr_FR", "en": "en_GB"}[lang]
     robots = "noindex, follow" if noindex else "index, follow, max-image-preview:large"
     html_doc = f"""<!doctype html>
-<html lang="fr">
+<html lang="{lang}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -435,14 +449,16 @@ def page(url, title, desc, body, crumbs=None, ld=None, og_image="/og-domaine-de-
 <meta name="description" content="{escape(desc)}">
 <meta name="robots" content="{robots}">
 <link rel="canonical" href="{canonical}">
+{alt_links}
 <meta name="theme-color" content="#15120f">
 <meta property="og:type" content="{og_type}">
-<meta property="og:locale" content="fr_FR">
+<meta property="og:locale" content="{og_locale}">
 <meta property="og:site_name" content="Domaine de Sabbat">
 <meta property="og:title" content="{escape(full_title)}">
 <meta property="og:description" content="{escape(desc)}">
 <meta property="og:url" content="{canonical}">
 <meta property="og:image" content="{SITE}{og_image}">
+<meta property="og:image:alt" content="{escape(full_title)}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="geo.region" content="FR-66">
 <meta name="geo.placename" content="Latour-de-France">
@@ -470,7 +486,7 @@ def page(url, title, desc, body, crumbs=None, ld=None, og_image="/og-domaine-de-
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html_doc, encoding="utf-8")
     if not noindex:
-        PAGES.append((url, priority))
+        PAGES.append((url, priority, alternates))
 
 
 def page_hero(eyebrow, h1, intro=None, dark=False):
@@ -525,7 +541,7 @@ def visit_cta(compact=False, widget=False):
       <p class="mt-5 max-w-xl text-lg leading-relaxed text-cream/80">Poussez la porte du chai à Latour-de-France : découverte de la vinification naturelle, dégustation commentée de 4 à 8 vins et échange direct avec le vigneron.</p>
       <ul class="mt-6 flex flex-wrap gap-3 text-sm">
         <li class="rounded-full border border-cream/25 px-4 py-1.5">1 h 30</li>
-        <li class="rounded-full border border-cream/25 px-4 py-1.5">Dès 15 € / pers.</li>
+        <li class="rounded-full border border-cream/25 px-4 py-1.5">3 € / pers.</li>
         <li class="rounded-full border border-cream/25 px-4 py-1.5">FR · EN · ES</li>
         <li class="rounded-full border border-cream/25 px-4 py-1.5">1 à 20 personnes</li>
       </ul>
@@ -621,8 +637,8 @@ def build_home():
 
 {visit_cta(widget=True)}
 """
-    page("/", "Domaine de Sabbat — Vins bio & nature, Vallée de l'Agly",
-         "Vigneron bio et nature à Latour-de-France (66) : vins de Maury, Tautavel et Vingrau, Côtes du Roussillon, Rivesaltes. Visite de cave et dégustation.",
+    page("/", "Domaine de Sabbat — Vins nature, Latour-de-France (66)",
+         "Vigneron bio et nature à Latour-de-France (66), Vallée de l'Agly : Côtes du Roussillon, Rivesaltes. Visite de cave et dégustation de vin nature à 3 € par personne.",
          body, priority="1.0")
 
 
@@ -696,7 +712,7 @@ def build_wines():
     {figure('vins-gamme', "Grappe de grenache noir presque mûre sur la vigne", "Bientôt à maturité !", 'max-w-[240px]', 'w-full h-auto rounded-xl')}
     <div class="prose-sabbat">
       <p>Rosé, blanc, rouges de garde ou vins plaisir sans sulfites ajoutés, et grands Rivesaltes : une gamme complète permettant à chacun de trouver le vin qui lui correspond.</p>
-      <p><a href="{ORDER_URL}">Commander nos vins</a> · <a href="/oenotourisme/">Venir les déguster au domaine</a></p>
+      <p><a href="{ORDER_URL}">Commander nos vins</a> · <a href="/oenotourisme/">Venir déguster ces vins nature à la cave de Latour-de-France</a></p>
     </div>
   </div>
   {sections}
@@ -739,6 +755,7 @@ def build_wines():
       <a href="{ORDER_URL}" class="btn-wine">Commander ce vin</a>
       <a href="/oenotourisme/" class="btn-ghost">Le déguster au domaine</a>
     </div>
+    <p class="mt-6 text-sm text-stone">Découvrez ce vin lors d'une <a class="text-wine underline" href="/oenotourisme/">visite de cave et dégustation à Latour-de-France</a> (3 € par personne) — <a class="text-wine underline" href="{VINYAQUI_URL}" target="_blank" rel="noopener">réservation sur Viny'aquí</a>.</p>
     <nav aria-label="Autres cuvées" class="mt-12 flex justify-between gap-4 border-t border-ink/10 pt-6 text-sm">
       <a href="/les-vins/{prev_w['slug']}/" class="hover:text-wine">← {escape(prev_w['name'])}</a>
       <a href="/les-vins/{next_w['slug']}/" class="text-right hover:text-wine">{escape(next_w['name'])} →</a>
@@ -800,8 +817,8 @@ def build_oenotourisme():
         "provider": {"@id": WINERY_ID},
         "itinerary": {"@type": "Place", "name": "Domaine de Sabbat",
                       "address": WINERY["address"], "geo": WINERY["geo"]},
-        "offers": {"@type": "Offer", "price": "15", "priceCurrency": "EUR", "url": VINYAQUI_URL,
-                   "availability": "https://schema.org/InStock", "description": "À partir de 15 € par personne"},
+        "offers": {"@type": "Offer", "price": "3", "priceCurrency": "EUR", "url": VINYAQUI_URL,
+                   "availability": "https://schema.org/InStock", "description": "3 € par personne"},
     }
     body = f"""
 <section class="bg-ink text-cream">
@@ -812,7 +829,7 @@ def build_oenotourisme():
       <p class="mt-6 max-w-xl text-lg leading-relaxed text-cream/80">Situé au pied des Corbières catalanes, le Domaine de Sabbat vous ouvre ses portes pour une immersion sensorielle au cœur du terroir catalan : la cave, la vinification naturelle, et les vins, avec celui qui les fait.</p>
       <ul class="mt-6 grid max-w-md grid-cols-2 gap-3 text-sm">
         <li class="rounded-xl border border-cream/20 p-3"><span class="block text-cream/60">Durée</span>1 h 30</li>
-        <li class="rounded-xl border border-cream/20 p-3"><span class="block text-cream/60">Tarif</span>Dès 15 € / pers.</li>
+        <li class="rounded-xl border border-cream/20 p-3"><span class="block text-cream/60">Tarif</span>3 € / pers.</li>
         <li class="rounded-xl border border-cream/20 p-3"><span class="block text-cream/60">Groupe</span>1 à 20 personnes</li>
         <li class="rounded-xl border border-cream/20 p-3"><span class="block text-cream/60">Langues</span>FR · EN · ES</li>
       </ul>
@@ -835,6 +852,12 @@ def build_oenotourisme():
       <li class="flex gap-3"><span class="mt-1 text-wine" aria-hidden="true">✦</span><span>Échange direct avec le vigneron</span></li>
       <li class="flex gap-3"><span class="mt-1 text-wine" aria-hidden="true">✦</span><span>Vente de vin possible sur place</span></li>
     </ul>
+    <h2 class="mt-12 font-serif text-3xl text-ink">Dégustation de vin nature en Roussillon : pour qui ?</h2>
+    <p class="mt-4">Que vous soyez amateur éclairé, curieux de <strong>vin bio et nature</strong>, en couple, entre amis, en famille ou en groupe jusqu'à 20 personnes, la visite s'adapte à votre rythme. Elle est proposée en français, en anglais et en espagnol, ce qui en fait une belle activité à faire en vacances dans les Pyrénées-Orientales, à moins d'une demi-heure de <strong>Perpignan</strong>.</p>
+    <h2 class="mt-12 font-serif text-3xl text-ink">Les vins que vous dégusterez</h2>
+    <p class="mt-4">Selon la sélection du jour : <a href="/les-vins/domaine-de-sabbat-blanc/">Côtes du Roussillon blanc</a>, <a href="/les-vins/domaine-de-sabbat-rose/">rosé I.G.P. Côtes Catalanes</a>, <a href="/les-vins/cuvee-printemps-1900/">Côtes du Roussillon Villages</a>, <a href="/les-vins/natural-born-syrah/">vins nature sans sulfites ajoutés</a> et, selon les millésimes, les grands <a href="/les-vins/rivesaltes-ambre/">Rivesaltes</a>. Retrouvez <a href="/les-vins/">toute la gamme</a> avant ou après votre venue.</p>
+    <h2 class="mt-12 font-serif text-3xl text-ink">Prolonger la journée dans la Vallée de l'Agly</h2>
+    <p class="mt-4">Latour-de-France est un point de départ idéal pour explorer Maury, Tautavel et Vingrau, les villages dont sont issus nos raisins. Consultez notre <a href="/oenotourisme/vallee-de-l-agly/">guide de la Vallée de l'Agly</a> : que voir, que faire et où déguster autour de la cave.</p>
     <p class="mt-6 text-sm text-stone">Transport non inclus. Le domaine se trouve au 24, boulevard Carnot à Latour-de-France, à 20 minutes de Perpignan — <a href="/plan-d-acces/">plan d'accès</a>.</p>
   </div>
 
@@ -854,16 +877,109 @@ def build_oenotourisme():
   <div class="mt-8 grid gap-4 lg:grid-cols-2">{faq_html}</div>
 </section>
 """
-    page("/oenotourisme/", "Visite de cave et dégustation de vin nature, Latour-de-France",
-         "Visite de cave et dégustation de vins nature au Domaine de Sabbat, Latour-de-France (66) : 1 h 30, 4 à 8 vins, dès 15 €. Réservez en ligne.",
+    page("/oenotourisme/", "Dégustation de vin nature et visite de cave, Latour-de-France",
+         "Dégustation de vins nature chez le vigneron à Latour-de-France, près de Perpignan : visite de cave, 4 à 8 vins, 1 h 30, 3 € par personne. Réservation en ligne.",
          body, crumbs=[("Accueil", "/"), ("Œnotourisme", "/oenotourisme/")], ld=[trip_ld, faq_ld], priority="0.9",
          og_image="/img/visite-embouteillage.webp",
+         alternates=[("fr", "/oenotourisme/"), ("en", "/en/wine-tasting-roussillon/"), ("x-default", "/oenotourisme/")],
          head_extra='<link rel="preconnect" href="https://vinyaqui.com">')
     # La page se gère avec son propre fil d'Ariane sous le hero : on retire celui du gabarit.
     out = DIST / "oenotourisme" / "index.html"
     html_doc = out.read_text(encoding="utf-8")
     first = crumbs_html([("Accueil", "/"), ("Œnotourisme", "/oenotourisme/")])
     out.write_text(html_doc.replace(first, "", 1), encoding="utf-8")
+
+
+def build_agly_guide():
+    spots = [
+        ("Maury", "Village vigneron au sol de schistes noirs, réputé pour ses vins doux naturels. Une étape évidente pour comprendre le terroir de nos vignes.", "/technique/terroir/", "Notre terroir"),
+        ("Tautavel", "Connu dans le monde entier pour l'Homme de Tautavel et son centre européen de préhistoire, Tautavel est aussi un village de vignerons où poussent certaines de nos parcelles.", "/technique/vignoble/", "Notre vignoble"),
+        ("Vingrau", "Village entouré de vignes au pied des Corbières, avec des paysages de garrigue et de falaises calcaires typiques de la Vallée de l'Agly.", "/presentation/", "Le domaine"),
+        ("Châteaux cathares", "À quelques dizaines de minutes de Latour-de-France, Quéribus et Peyrepertuse dominent les Corbières : une sortie incontournable pour une journée vin et patrimoine.", None, None),
+        ("Gorges de Galamus", "Route spectaculaire taillée dans la roche, à environ 30 à 40 minutes de la cave, idéale pour une demi-journée de balade.", None, None),
+    ]
+    cards = "".join(f"""
+<li class="rounded-2xl bg-white p-6 ring-1 ring-ink/5">
+  <h3 class="font-serif text-2xl">{n}</h3>
+  <p class="mt-2 leading-relaxed text-ink/75">{t}</p>
+  {f'<a class="mt-3 inline-block text-wine underline underline-offset-4" href="{u}">{l}</a>' if u else ''}
+</li>""" for n, t, u, l in spots)
+    body = page_hero("Œnotourisme", "Que faire dans la Vallée de l'Agly ?",
+                     "Entre Perpignan et les Corbières, la Vallée de l'Agly mêle villages vignerons, patrimoine cathare et paysages sauvages. Notre guide pour organiser une journée autour de la dégustation à la cave de Latour-de-France.")
+    body += f"""<div class="container-x grid gap-12 pb-16 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
+  <div>
+    <div class="prose-sabbat">
+      <h2 class="font-serif text-3xl text-ink">Une journée type autour de Latour-de-France</h2>
+      <p class="mt-4">Latour-de-France se trouve à environ 20 km au nord-ouest de <strong>Perpignan</strong>. Notre conseil : réserver la <a href="/oenotourisme/">visite de cave et dégustation de vin nature</a> (1 h 30) le matin ou en début d'après-midi, puis prolonger la journée dans la vallée. Les créneaux sont disponibles à la <a href="{VINYAQUI_URL}" target="_blank" rel="noopener">réservation en ligne sur Viny'aquí</a>.</p>
+    </div>
+    <ul class="mt-8 grid gap-5 sm:grid-cols-2">{cards}</ul>
+    <p class="mt-8 text-sm text-stone">Horaires et conditions de visite des sites touristiques : à vérifier auprès de chacun avant de vous déplacer.</p>
+  </div>
+  <aside class="rounded-3xl bg-ink p-6 text-cream sm:p-8 lg:sticky lg:top-28 lg:self-start">
+    <p class="eyebrow !text-ochre-light">Dégustation</p>
+    <h2 class="mt-2 font-serif text-3xl">Visite de cave à Latour-de-France</h2>
+    <p class="mt-3 text-cream/80">Visite du chai, vinification naturelle et dégustation commentée de 4 à 8 vins avec le vigneron. 3 € par personne.</p>
+    <a href="/oenotourisme/" class="btn-ochre mt-6">Réserver ma dégustation</a>
+    <p class="mt-4 text-sm"><a class="underline" href="{VINYAQUI_URL}" target="_blank" rel="noopener">{VINYAQUI_ANCHOR}</a></p>
+    <p class="mt-4 text-sm text-cream/70"><a class="underline" href="/plan-d-acces/">Plan d'accès à la cave</a></p>
+  </aside>
+</div>"""
+    page("/oenotourisme/vallee-de-l-agly/", "Que faire dans la Vallée de l'Agly ? Guide et dégustation",
+         "Guide de la Vallée de l'Agly autour de Latour-de-France : Maury, Tautavel, Vingrau, châteaux cathares et dégustation de vin nature chez le vigneron.",
+         body, crumbs=[("Accueil", "/"), ("Œnotourisme", "/oenotourisme/"), ("Vallée de l'Agly", "/oenotourisme/vallee-de-l-agly/")],
+         priority="0.8", og_image="/img/vignoble.webp")
+
+
+def build_en_tasting():
+    faq = [
+        ("How long is the cellar visit and wine tasting?", "About 1 hour 30. You taste between 4 and 8 natural and organic wines with the winemaker."),
+        ("How much does it cost?", "€3 per person, shown in the booking module."),
+        ("Which languages are available?", "The visit is offered in French, English and Spanish, for 1 to 20 people per slot."),
+        ("Where is the winery?", "24 boulevard Carnot, 66720 Latour-de-France, in the Agly Valley, about 20 km north-west of Perpignan (Pyrénées-Orientales, Roussillon, South of France)."),
+        ("Can I cancel my booking?", "Yes, cancellation is possible up to 1 day before the visit."),
+    ]
+    faq_ld = {"@context": "https://schema.org", "@type": "FAQPage",
+              "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]}
+    faq_html = "".join(f"""
+<details class="group rounded-2xl bg-white p-5 ring-1 ring-ink/5"><summary class="cursor-pointer list-none font-medium">{escape(q)}</summary><p class="mt-3 leading-relaxed text-ink/75">{escape(a)}</p></details>""" for q, a in faq)
+    body = f"""
+<section class="bg-ink text-cream">
+  <div class="container-x py-12 lg:py-16">
+    <p class="eyebrow !text-ochre-light">Wine tourism · Roussillon · South of France</p>
+    <h1 class="mt-4 max-w-3xl text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">Natural wine tasting &amp; cellar visit near Perpignan</h1>
+    <p class="mt-6 max-w-2xl text-lg leading-relaxed text-cream/80">Visit the cellar of an organic and natural winery in Latour-de-France, in the Agly Valley, and taste 4 to 8 wines with the winemaker. 1 h 30, €3 per person, in English, French or Spanish.</p>
+    <a href="#book" class="btn-ochre mt-8">Check availability</a>
+  </div>
+</section>
+<div class="container-x grid gap-12 py-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:py-16">
+  <div class="prose-sabbat">
+    <h2 class="font-serif text-4xl text-ink">An authentic visit at the winemaker's</h2>
+    <p class="mt-5">Domaine de Sabbat is a family winery of 11 hectares founded in 2008 by <strong>Sylvain Lejeune</strong>. The vines grow on schist, marl and clay-limestone soils around Maury, Tautavel and Vingrau, at the foot of the Corbières hills. During the visit you discover the cellar and the principles of natural winemaking: no chemical inputs, respect for the grape, the soil and living things.</p>
+    <p>The tasting covers a selection of Côtes du Roussillon, Côtes du Roussillon Villages, I.G.P. Côtes Catalanes, natural wines and Rivesaltes, depending on the day.</p>
+    <h3 class="mt-10 font-serif text-2xl text-ink">At a glance</h3>
+    <ul class="mt-4 space-y-2">
+      <li>Duration: 1 h 30</li><li>Price: €3 per person</li><li>Group size: 1 to 20 people</li>
+      <li>Languages: English, French, Spanish</li><li>Wine available to buy on site</li>
+    </ul>
+    <p class="mt-6 text-sm text-stone">Address: 24 boulevard Carnot, 66720 Latour-de-France — <a href="/plan-d-acces/">directions (in French)</a>. Also available as a gift card.</p>
+  </div>
+  <section id="book" class="scroll-mt-28 lg:sticky lg:top-28 lg:self-start">
+    <div class="rounded-3xl bg-white p-5 shadow-lg ring-1 ring-ink/5 sm:p-8">
+      <h2 class="font-serif text-3xl">Book your tasting</h2>
+      <p class="mt-2 text-sm text-stone">Pick a date and a time slot. Instant booking, secure payment.</p>
+      <div class="mt-6">{vinyaqui_widget().replace(VINYAQUI_ANCHOR, "Cellar visit and natural wine tasting in Latour-de-France, on Viny'aquí")}</div>
+    </div>
+  </section>
+</div>
+<section class="container-x pb-16"><h2 class="font-serif text-4xl">Frequently asked questions</h2><div class="mt-8 grid gap-4 lg:grid-cols-2">{faq_html}</div>
+  <p class="mt-8"><a class="text-wine underline" href="/oenotourisme/">Version française</a></p></section>
+"""
+    page("/en/wine-tasting-roussillon/", "Natural wine tasting & cellar visit near Perpignan",
+         "Natural wine tasting at a winemaker's cellar in Latour-de-France, near Perpignan: 4 to 8 organic wines, 1 h 30, €3 per person. Book online, English spoken.",
+         body, crumbs=[("Home", "/"), ("Wine tasting", "/en/wine-tasting-roussillon/")], ld=[faq_ld], priority="0.8",
+         og_image="/img/visite-embouteillage.webp", lang="en",
+         alternates=[("fr", "/oenotourisme/"), ("en", "/en/wine-tasting-roussillon/"), ("x-default", "/oenotourisme/")],
+         head_extra='<link rel="preconnect" href="https://vinyaqui.com">')
 
 
 def build_news():
@@ -965,6 +1081,7 @@ def build_access():
       <a class="btn-wine" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&amp;destination={BIZ['lat']},{BIZ['lng']}">Itinéraire Google Maps ↗</a>
       <a class="btn-ghost" href="/oenotourisme/">Réserver une visite</a>
     </div>
+    <p class="text-sm text-stone">Venez déguster nos vins à la cave : <a class="text-wine underline" href="{VINYAQUI_URL}" target="_blank" rel="noopener">{VINYAQUI_ANCHOR}</a>.</p>
   </div>
 </div>"""
     page("/plan-d-acces/", "Plan d'accès — Latour-de-France (66)",
@@ -1022,9 +1139,13 @@ def build_404():
 # --------------------------------------------------------------------------- fichiers techniques
 
 def build_meta_files():
-    urls = "".join(f"<url><loc>{SITE}{u}</loc><lastmod>{TODAY}</lastmod><priority>{p}</priority></url>\n" for u, p in PAGES)
+    def sm_entry(u, p, alts):
+        xl = "".join(f'<xhtml:link rel="alternate" hreflang="{hl}" href="{SITE}{au}"/>' for hl, au in (alts or []))
+        return f"<url><loc>{SITE}{u}</loc><lastmod>{TODAY}</lastmod><priority>{p}</priority>{xl}</url>\n"
+    urls = "".join(sm_entry(*e) for e in PAGES)
     (DIST / "sitemap.xml").write_text(
-        f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n', encoding="utf-8")
+        '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
+        f'{urls}</urlset>\n', encoding="utf-8")
     (DIST / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n", encoding="utf-8")
 
     # Redirections 301 depuis les URL de l'ancien site IONOS (accents encodés).
@@ -1057,7 +1178,9 @@ def build_meta_files():
 > Domaine viticole familial de 11 ha en Vallée de l'Agly (Pyrénées-Orientales), fondé en 2008 par Sylvain Lejeune. Vins biologiques et vins nature : Côtes du Roussillon, Côtes du Roussillon Villages, I.G.P. Côtes Catalanes, Vin de France et Rivesaltes. Cave à Latour-de-France (66720).
 
 ## Pages
-- [Visite de cave et dégustation]({SITE}/oenotourisme/): 1 h 30, 4 à 8 vins, dès 15 €, réservation en ligne
+- [Visite de cave et dégustation]({SITE}/oenotourisme/): 1 h 30, 4 à 8 vins, 3 € par personne, réservation en ligne
+- [Guide de la Vallée de l'Agly]({SITE}/oenotourisme/vallee-de-l-agly/): que faire autour de Latour-de-France
+- [Wine tasting & cellar visit (EN)]({SITE}/en/wine-tasting-roussillon/): natural wine tasting near Perpignan, €3 per person
 - [Les vins]({SITE}/les-vins/): 11 cuvées
 - [Présentation]({SITE}/presentation/)
 - [Technique : terroir, vignoble, cave]({SITE}/technique/)
@@ -1085,6 +1208,6 @@ if __name__ == "__main__":
             shutil.rmtree(p) if p.is_dir() else p.unlink()
     copy_assets()
     build_home(); build_presentation(); build_technique(); build_wines(); build_actors()
-    build_oenotourisme(); build_news(); build_order(); build_access(); build_contact(); build_legal(); build_404()
+    build_oenotourisme(); build_agly_guide(); build_en_tasting(); build_news(); build_order(); build_access(); build_contact(); build_legal(); build_404()
     build_meta_files()
     print(f"{len(PAGES)} pages indexables générées dans dist/")

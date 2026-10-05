@@ -28,7 +28,9 @@ Mettre en ligne **le contenu de `dist/`** à la racine du site (IONOS / Apache) 
 
 - Un title et une meta description uniques par page, une URL canonique, Open Graph et Twitter Card.
 - JSON-LD : `Winery` (adresse, coordonnées GPS, fondateur), `BreadcrumbList`, `Product` pour chaque vin,
-  `ItemList` pour la gamme, `TouristTrip` avec une offre à partir de 15 € et `FAQPage` sur `/oenotourisme/`.
+  `ItemList` pour la gamme, `TouristTrip` avec une offre à 3 € par personne et `FAQPage` sur `/oenotourisme/`.
+- Pages dédiées à la dégustation : `/oenotourisme/`, guide `/oenotourisme/vallee-de-l-agly/` et version anglaise `/en/wine-tasting-roussillon/` (hreflang dans le `<head>` et le sitemap).
+- Liens vers Viny'aquí avec ancre descriptive sur l'accueil, les fiches vins, le plan d'accès et les pages œnotourisme.
 - Un seul H1 par page, images en WebP avec `width`/`height` et chargement différé, maillage interne, `llms.txt`.
 
 ## E-boutique
