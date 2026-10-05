@@ -483,7 +483,8 @@ def page_hero(eyebrow, h1, intro=None, dark=False):
 </header>"""
 
 
-def visit_cta(compact=False):
+def visit_cta(compact=False, vinyaqui=False):
+    viny = f'<a href="{VINYAQUI_URL}" target="_blank" rel="noopener noreferrer" class="btn-ghost-light mt-8">Voir l\'activité sur Viny\'aquí</a>' if vinyaqui else ""
     return f"""
 <section aria-labelledby="cta-visite" class="bg-ink text-cream">
   <div class="container-x grid items-center gap-10 py-16 md:grid-cols-[1.2fr_1fr] lg:py-20">
@@ -497,7 +498,10 @@ def visit_cta(compact=False):
         <li class="rounded-full border border-cream/25 px-4 py-1.5">FR · EN · ES</li>
         <li class="rounded-full border border-cream/25 px-4 py-1.5">1 à 20 personnes</li>
       </ul>
-      <a href="/oenotourisme/#reserver" class="btn-ochre mt-8">Réserver ma visite</a>
+      <div class="flex flex-wrap gap-3">
+        <a href="/oenotourisme/#reserver" class="btn-ochre mt-8">Réserver ma visite</a>
+        {viny}
+      </div>
     </div>
     {'' if compact else img('visite-embouteillage', "Barriques et bouteilles dans le chai du Domaine de Sabbat", 'mx-auto aspect-[16/10] w-full rounded-2xl object-cover md:aspect-[4/5] md:max-w-sm')}
   </div>
@@ -584,7 +588,7 @@ def build_home():
   <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">{''.join(wine_card(w) for w in picks)}</ul>
 </section>
 
-{visit_cta()}
+{visit_cta(vinyaqui=True)}
 """
     page("/", "Domaine de Sabbat — Vins bio & nature, Vallée de l'Agly",
          "Vigneron bio et nature à Latour-de-France (66) : vins de Maury, Tautavel et Vingrau, Côtes du Roussillon, Rivesaltes. Visite de cave et dégustation.",
