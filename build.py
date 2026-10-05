@@ -506,9 +506,9 @@ def vinyaqui_widget():
     return f"""<!-- Widget de réservation Vinyaqui -->
         <div id="vinyaqui-widget"></div>
         <a class="vinyaqui-backlink" href="{VINYAQUI_URL}" target="_blank" rel="noopener">{VINYAQUI_ANCHOR}</a>
-        <link rel="stylesheet" href="https://vinyaqui.com/widget/booking-widget.css?v=1.3">
+        <link rel="stylesheet" href="https://vinyaqui.com/widget/booking-widget.css?v=1.4">
         <script
-          src="https://vinyaqui.com/widget/booking-widget.js?v=1.3"
+          src="https://vinyaqui.com/widget/booking-widget.js?v=1.4"
           data-api-base="https://vinyaqui.com/api"
           data-activity="visite-de-la-cave-et-degustation-de-vin-nature-au-domaine-de-sabbat"
           data-api-key="vk_brM50cZ7UtUDW5ZNkVIW6wPjn5BJJTbayzlrAZGHJuyLOC9nzJCWDppRKrt9"
