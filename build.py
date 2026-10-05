@@ -483,12 +483,43 @@ def page_hero(eyebrow, h1, intro=None, dark=False):
 </header>"""
 
 
-def visit_cta(compact=False, vinyaqui=False):
-    viny = f'<a href="{VINYAQUI_URL}" target="_blank" rel="noopener noreferrer" class="btn-ghost-light mt-8">Voir l\'activité sur Viny\'aquí</a>' if vinyaqui else ""
+VINYAQUI_ANCHOR = "Visite de cave et dégustation de vin nature à Latour-de-France, sur Viny'aquí"
+
+
+def vinyaqui_widget():
+    return f"""<!-- Widget de réservation Vinyaqui -->
+        <div id="vinyaqui-widget"></div>
+        <a class="vinyaqui-backlink" href="{VINYAQUI_URL}" target="_blank" rel="noopener">{VINYAQUI_ANCHOR}</a>
+        <link rel="stylesheet" href="https://vinyaqui.com/widget/booking-widget.css?v=1.3">
+        <script
+          src="https://vinyaqui.com/widget/booking-widget.js?v=1.3"
+          data-api-base="https://vinyaqui.com/api"
+          data-activity="visite-de-la-cave-et-degustation-de-vin-nature-au-domaine-de-sabbat"
+          data-api-key="vk_brM50cZ7UtUDW5ZNkVIW6wPjn5BJJTbayzlrAZGHJuyLOC9nzJCWDppRKrt9"
+          data-target="#vinyaqui-widget"
+        ></script>
+        <noscript><p class="mt-4"><a class="btn-wine" href="{VINYAQUI_URL}">Réserver sur Viny'aquí</a></p></noscript>"""
+
+
+def visit_cta(compact=False, widget=False):
+    left_img = img('visite-embouteillage', "Barriques et bouteilles dans le chai du Domaine de Sabbat", 'mb-8 aspect-[16/9] w-full rounded-2xl object-cover') if widget else ""
+    viny_btn = (f'<a href="{VINYAQUI_URL}" target="_blank" rel="noopener" class="btn-ghost-light mt-8">'
+                "Voir l'activité sur Viny'aquí</a>") if widget else ""
+    if widget:
+        side = f'''<div class="rounded-3xl bg-white p-5 text-ink shadow-lg sm:p-8">
+      <h3 class="font-serif text-2xl">Réserver en ligne</h3>
+      <p class="mt-2 text-sm text-stone">Choisissez une date et un créneau. Réservation instantanée, paiement sécurisé.</p>
+      <div class="mt-5">{vinyaqui_widget()}</div>
+    </div>'''
+    elif compact:
+        side = ""
+    else:
+        side = img('visite-embouteillage', "Barriques et bouteilles dans le chai du Domaine de Sabbat", 'mx-auto aspect-[16/10] w-full rounded-2xl object-cover md:aspect-[4/5] md:max-w-sm')
     return f"""
 <section aria-labelledby="cta-visite" class="bg-ink text-cream">
-  <div class="container-x grid items-center gap-10 py-16 md:grid-cols-[1.2fr_1fr] lg:py-20">
+  <div class="container-x grid {'items-start' if widget else 'items-center'} gap-10 py-16 md:grid-cols-[1.2fr_1fr] lg:py-20">
     <div>
+      {left_img}
       <p class="eyebrow !text-ochre-light">Œnotourisme</p>
       <h2 id="cta-visite" class="mt-3 text-4xl sm:text-5xl">Visitez la cave, dégustez nos vins nature</h2>
       <p class="mt-5 max-w-xl text-lg leading-relaxed text-cream/80">Poussez la porte du chai à Latour-de-France : découverte de la vinification naturelle, dégustation commentée de 4 à 8 vins et échange direct avec le vigneron.</p>
@@ -499,11 +530,11 @@ def visit_cta(compact=False, vinyaqui=False):
         <li class="rounded-full border border-cream/25 px-4 py-1.5">1 à 20 personnes</li>
       </ul>
       <div class="flex flex-wrap gap-3">
-        <a href="/oenotourisme/#reserver" class="btn-ochre mt-8">Réserver ma visite</a>
-        {viny}
+        <a href="/oenotourisme/" class="btn-ochre mt-8">{"Tout savoir sur la visite" if widget else "Réserver ma visite"}</a>
+        {viny_btn}
       </div>
     </div>
-    {'' if compact else img('visite-embouteillage', "Barriques et bouteilles dans le chai du Domaine de Sabbat", 'mx-auto aspect-[16/10] w-full rounded-2xl object-cover md:aspect-[4/5] md:max-w-sm')}
+    {side}
   </div>
 </section>"""
 
@@ -588,7 +619,7 @@ def build_home():
   <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">{''.join(wine_card(w) for w in picks)}</ul>
 </section>
 
-{visit_cta(vinyaqui=True)}
+{visit_cta(widget=True)}
 """
     page("/", "Domaine de Sabbat — Vins bio & nature, Vallée de l'Agly",
          "Vigneron bio et nature à Latour-de-France (66) : vins de Maury, Tautavel et Vingrau, Côtes du Roussillon, Rivesaltes. Visite de cave et dégustation.",
@@ -812,18 +843,7 @@ def build_oenotourisme():
       <h2 id="reserver-titre" class="font-serif text-3xl">Réserver votre visite</h2>
       <p class="mt-2 text-sm text-stone">Choisissez une date, un créneau et le nombre de participants. Réservation instantanée et paiement sécurisé.</p>
       <div class="mt-6">
-        <!-- Widget de réservation Vinyaqui -->
-        <div id="vinyaqui-widget"></div>
-        <a class="vinyaqui-backlink" href="{VINYAQUI_URL}" target="_blank" rel="noopener noreferrer">Réservez cette expérience sur Viny'aquí</a>
-        <link rel="stylesheet" href="https://vinyaqui.com/widget/booking-widget.css?v=1.3">
-        <script
-          src="https://vinyaqui.com/widget/booking-widget.js?v=1.3"
-          data-api-base="https://vinyaqui.com/api"
-          data-activity="visite-de-la-cave-et-degustation-de-vin-nature-au-domaine-de-sabbat"
-          data-api-key="vk_brM50cZ7UtUDW5ZNkVIW6wPjn5BJJTbayzlrAZGHJuyLOC9nzJCWDppRKrt9"
-          data-target="#vinyaqui-widget"
-        ></script>
-        <noscript><p class="mt-4"><a class="btn-wine" href="{VINYAQUI_URL}">Réserver sur Viny'aquí</a></p></noscript>
+        {vinyaqui_widget()}
       </div>
     </div>
   </section>

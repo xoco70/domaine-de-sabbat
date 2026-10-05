@@ -152,8 +152,9 @@
 
 
 <section aria-labelledby="cta-visite" class="bg-ink text-cream">
-  <div class="container-x grid items-center gap-10 py-16 md:grid-cols-[1.2fr_1fr] lg:py-20">
+  <div class="container-x grid items-start gap-10 py-16 md:grid-cols-[1.2fr_1fr] lg:py-20">
     <div>
+      <img src="/img/visite-embouteillage.webp" alt="Barriques et bouteilles dans le chai du Domaine de Sabbat" width="900" height="1355" loading="lazy" decoding="async" class="mb-8 aspect-[16/9] w-full rounded-2xl object-cover">
       <p class="eyebrow !text-ochre-light">Œnotourisme</p>
       <h2 id="cta-visite" class="mt-3 text-4xl sm:text-5xl">Visitez la cave, dégustez nos vins nature</h2>
       <p class="mt-5 max-w-xl text-lg leading-relaxed text-cream/80">Poussez la porte du chai à Latour-de-France : découverte de la vinification naturelle, dégustation commentée de 4 à 8 vins et échange direct avec le vigneron.</p>
@@ -164,11 +165,26 @@
         <li class="rounded-full border border-cream/25 px-4 py-1.5">1 à 20 personnes</li>
       </ul>
       <div class="flex flex-wrap gap-3">
-        <a href="/oenotourisme/#reserver" class="btn-ochre mt-8">Réserver ma visite</a>
-        <a href="https://vinyaqui.com/activities/visite-de-la-cave-et-degustation-de-vin-nature-au-domaine-de-sabbat" target="_blank" rel="noopener noreferrer" class="btn-ghost-light mt-8">Voir l'activité sur Viny'aquí</a>
+        <a href="/oenotourisme/" class="btn-ochre mt-8">Tout savoir sur la visite</a>
+        <a href="https://vinyaqui.com/activities/visite-de-la-cave-et-degustation-de-vin-nature-au-domaine-de-sabbat" target="_blank" rel="noopener" class="btn-ghost-light mt-8">Voir l'activité sur Viny'aquí</a>
       </div>
     </div>
-    <img src="/img/visite-embouteillage.webp" alt="Barriques et bouteilles dans le chai du Domaine de Sabbat" width="900" height="1355" loading="lazy" decoding="async" class="mx-auto aspect-[16/10] w-full rounded-2xl object-cover md:aspect-[4/5] md:max-w-sm">
+    <div class="rounded-3xl bg-white p-5 text-ink shadow-lg sm:p-8">
+      <h3 class="font-serif text-2xl">Réserver en ligne</h3>
+      <p class="mt-2 text-sm text-stone">Choisissez une date et un créneau. Réservation instantanée, paiement sécurisé.</p>
+      <div class="mt-5"><!-- Widget de réservation Vinyaqui -->
+        <div id="vinyaqui-widget"></div>
+        <a class="vinyaqui-backlink" href="https://vinyaqui.com/activities/visite-de-la-cave-et-degustation-de-vin-nature-au-domaine-de-sabbat" target="_blank" rel="noopener">Visite de cave et dégustation de vin nature à Latour-de-France, sur Viny'aquí</a>
+        <link rel="stylesheet" href="https://vinyaqui.com/widget/booking-widget.css?v=1.3">
+        <script
+          src="https://vinyaqui.com/widget/booking-widget.js?v=1.3"
+          data-api-base="https://vinyaqui.com/api"
+          data-activity="visite-de-la-cave-et-degustation-de-vin-nature-au-domaine-de-sabbat"
+          data-api-key="vk_brM50cZ7UtUDW5ZNkVIW6wPjn5BJJTbayzlrAZGHJuyLOC9nzJCWDppRKrt9"
+          data-target="#vinyaqui-widget"
+        ></script>
+        <noscript><p class="mt-4"><a class="btn-wine" href="https://vinyaqui.com/activities/visite-de-la-cave-et-degustation-de-vin-nature-au-domaine-de-sabbat">Réserver sur Viny'aquí</a></p></noscript></div>
+    </div>
   </div>
 </section>
 
