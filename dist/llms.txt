@@ -7,5 +7,5 @@
 - [Les vins](https://www.domainedesabbat.fr/les-vins/): 11 cuvées
 - [Présentation](https://www.domainedesabbat.fr/presentation/)
 - [Technique : terroir, vignoble, cave](https://www.domainedesabbat.fr/technique/)
-- [E-boutique](https://boutique.domainedesabbat.fr/)
+- [Commander](https://www.domainedesabbat.fr/commander/): bon de commande PDF à renvoyer par e-mail
 - [Contact](https://www.domainedesabbat.fr/contact/): +33 6 75 48 19 74, contact@domainedesabbat.fr

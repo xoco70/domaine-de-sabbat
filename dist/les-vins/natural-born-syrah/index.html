@@ -32,15 +32,15 @@
 <header id="site-header" class="sticky top-0 z-50 bg-ink/95 text-cream backdrop-blur transition-shadow">
   <div class="container-x flex h-16 items-center justify-between gap-4 lg:h-20">
     <a href="/" class="font-serif text-2xl font-semibold leading-none tracking-wide [font-variant:small-caps] lg:text-[1.7rem]" aria-label="Domaine de Sabbat — accueil">Domaine de Sabbat</a>
-    <nav aria-label="Navigation principale" class="hidden items-center gap-1 lg:flex"><a href="/presentation/" class="nav-link">Le domaine</a><a href="/technique/" class="nav-link">Technique</a><a href="/les-vins/" class="nav-link" aria-current="page">Les vins</a><a href="/les-acteurs/" class="nav-link">Les acteurs</a><a href="/actualite/" class="nav-link">Actualité</a><a href="https://boutique.domainedesabbat.fr/" class="nav-link">E-boutique</a><a href="/contact/" class="nav-link">Contact</a>
-      <a href="/oenotourisme/" class="btn-ochre ml-2 !px-4 !py-2">Visites & dégustations</a>
+    <nav aria-label="Navigation principale" class="hidden items-center gap-0.5 lg:flex xl:gap-1"><a href="/presentation/" class="nav-link">Le domaine</a><a href="/technique/" class="nav-link">Technique</a><a href="/les-vins/" class="nav-link" aria-current="page">Les vins</a><a href="/les-acteurs/" class="nav-link">Les acteurs</a><a href="/actualite/" class="nav-link">Actualité</a><a href="/commander/" class="nav-link">Commander</a><a href="/contact/" class="nav-link">Contact</a>
+      <a href="/oenotourisme/" class="ml-2 whitespace-nowrap rounded-full border border-cream/30 px-3.5 py-1.5 text-sm text-cream/80 transition-colors hover:border-cream hover:text-cream">Visites & dégustations</a>
     </nav>
     <button id="menu-toggle" type="button" class="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-full lg:hidden" aria-controls="mobile-menu" aria-expanded="false" aria-label="Ouvrir le menu">
       <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
   </div>
   <nav id="mobile-menu" aria-label="Navigation mobile" class="h-[calc(100dvh-4rem)] overflow-y-auto border-t border-ink-line bg-ink px-4 pb-10 pt-2 lg:hidden" hidden>
-    <a href="/presentation/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">Le domaine</a><a href="/technique/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">Technique</a><a href="/les-vins/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line" aria-current="page">Les vins</a><a href="/les-acteurs/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">Les acteurs</a><a href="/actualite/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">Actualité</a><a href="https://boutique.domainedesabbat.fr/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">E-boutique</a><a href="/contact/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">Contact</a>
+    <a href="/presentation/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">Le domaine</a><a href="/technique/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">Technique</a><a href="/les-vins/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line" aria-current="page">Les vins</a><a href="/les-acteurs/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">Les acteurs</a><a href="/actualite/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">Actualité</a><a href="/commander/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">Commander</a><a href="/contact/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">Contact</a>
     <a href="/oenotourisme/" class="btn-ochre mt-6 w-full">Visites & dégustations</a>
     <p class="mt-6 text-sm text-cream/60">Accueil et visite sur rendez-vous<br><a class="underline" href="tel:+33675481974">+33 6 75 48 19 74</a></p>
   </nav>
@@ -62,7 +62,7 @@
     <dl class="wine-spec mt-8 grid gap-5 rounded-2xl bg-white p-6 ring-1 ring-ink/5 sm:grid-cols-2"><div><dt>Appellation</dt><dd>Vin de France</dd></div><div><dt>Cépages</dt><dd>100 % Syrah</dd></div><div><dt>Vinification</dt><dd>En cuve</dd></div><div><dt>Élevage</dt><dd>En cuve, 12 mois</dd></div><div><dt>Garde</dt><dd>3 à 5 ans</dd></div></dl>
     <h2 class="mt-10 font-serif text-3xl text-ink">Dégustation</h2><p class="mt-3 font-serif text-xl italic leading-relaxed text-ink/80">Frais et complexe ; arômes de violette, réglisse ; vin jeune à boire maintenant.</p>
     <div class="mt-10 flex flex-wrap gap-3">
-      <a href="https://boutique.domainedesabbat.fr/" class="btn-wine">Commander ce vin</a>
+      <a href="/commander/" class="btn-wine">Commander ce vin</a>
       <a href="/oenotourisme/" class="btn-ghost">Le déguster au domaine</a>
     </div>
     <nav aria-label="Autres cuvées" class="mt-12 flex justify-between gap-4 border-t border-ink/10 pt-6 text-sm">
@@ -77,9 +77,9 @@
   <div class="container-x grid gap-6 py-12 md:grid-cols-3">
     <h2 id="band-titre" class="font-serif text-3xl">Actualités</h2>
     <div>
-      <p class="eyebrow">Boutique en ligne</p>
-      <p class="mt-2 text-lg font-medium">Expédition 100 % offerte !</p>
-      <a href="https://boutique.domainedesabbat.fr/" class="mt-2 inline-block text-wine underline underline-offset-4">Visitez la boutique</a>
+      <p class="eyebrow">Commander</p>
+      <p class="mt-2 text-lg font-medium">Bon de commande et catalogue des cuvées</p>
+      <a href="/commander/" class="mt-2 inline-block text-wine underline underline-offset-4">Commander nos vins</a>
     </div>
     <div>
       <p class="eyebrow">Les rendez-vous</p>
@@ -109,7 +109,7 @@
     </div>
     <nav aria-label="Pied de page">
       <h2 class="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-ochre-light">Le site</h2>
-      <ul class="mt-4 space-y-2 text-sm"><li><a class="hover:text-cream" href="/presentation/">Le domaine</a></li><li><a class="hover:text-cream" href="/technique/">Technique</a></li><li><a class="hover:text-cream" href="/les-vins/">Les vins</a></li><li><a class="hover:text-cream" href="/les-acteurs/">Les acteurs</a></li><li><a class="hover:text-cream" href="/actualite/">Actualité</a></li><li><a class="hover:text-cream" href="https://boutique.domainedesabbat.fr/">E-boutique</a></li><li><a class="hover:text-cream" href="/contact/">Contact</a></li>
+      <ul class="mt-4 space-y-2 text-sm"><li><a class="hover:text-cream" href="/presentation/">Le domaine</a></li><li><a class="hover:text-cream" href="/technique/">Technique</a></li><li><a class="hover:text-cream" href="/les-vins/">Les vins</a></li><li><a class="hover:text-cream" href="/les-acteurs/">Les acteurs</a></li><li><a class="hover:text-cream" href="/actualite/">Actualité</a></li><li><a class="hover:text-cream" href="/commander/">Commander</a></li><li><a class="hover:text-cream" href="/contact/">Contact</a></li>
         <li><a class="hover:text-cream" href="/oenotourisme/">Œnotourisme</a></li>
         <li><a class="hover:text-cream" href="/plan-d-acces/">Plan d'accès</a></li>
         <li><a class="hover:text-cream" href="/mentions-legales/">Mentions légales</a></li>

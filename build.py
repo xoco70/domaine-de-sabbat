@@ -35,8 +35,10 @@ BIZ = {
     "email": "contact@domainedesabbat.fr",
 }
 
-# Boutique existante, migrée sur un sous-domaine (à ajuster si le nom change).
-SHOP_URL = "https://boutique.domainedesabbat.fr/"
+# Plus de boutique en ligne : commande par bon de commande (PDF) envoyé par e-mail.
+ORDER_URL = "/commander/"
+ORDER_PDF = "/docs/bon-de-commande.pdf"
+CATALOG_PDF = "/docs/catalogue-cuvees.pdf"
 
 VINYAQUI_URL = "https://vinyaqui.com/activities/visite-de-la-cave-et-degustation-de-vin-nature-au-domaine-de-sabbat"
 
@@ -246,7 +248,7 @@ NAV = [
     ("Les vins", "/les-vins/"),
     ("Les acteurs", "/les-acteurs/"),
     ("Actualité", "/actualite/"),
-    ("E-boutique", SHOP_URL),
+    ("Commander", ORDER_URL),
     ("Contact", "/contact/"),
 ]
 CTA = ("Visites & dégustations", "/oenotourisme/")
@@ -327,8 +329,8 @@ def header(current):
 <header id="site-header" class="sticky top-0 z-50 bg-ink/95 text-cream backdrop-blur transition-shadow">
   <div class="container-x flex h-16 items-center justify-between gap-4 lg:h-20">
     <a href="/" class="font-serif text-2xl font-semibold leading-none tracking-wide [font-variant:small-caps] lg:text-[1.7rem]" aria-label="Domaine de Sabbat — accueil">Domaine de Sabbat</a>
-    <nav aria-label="Navigation principale" class="hidden items-center gap-1 lg:flex">{desktop}
-      <a href="{CTA[1]}" class="btn-ochre ml-2 !px-4 !py-2"{' aria-current="page"' if current.startswith(CTA[1]) else ''}>{CTA[0]}</a>
+    <nav aria-label="Navigation principale" class="hidden items-center gap-0.5 lg:flex xl:gap-1">{desktop}
+      <a href="{CTA[1]}" class="ml-2 whitespace-nowrap rounded-full border border-cream/30 px-3.5 py-1.5 text-sm text-cream/80 transition-colors hover:border-cream hover:text-cream"{' aria-current="page"' if current.startswith(CTA[1]) else ''}>{CTA[0]}</a>
     </nav>
     <button id="menu-toggle" type="button" class="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-full lg:hidden" aria-controls="mobile-menu" aria-expanded="false" aria-label="Ouvrir le menu">
       <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -348,9 +350,9 @@ def news_band():
   <div class="container-x grid gap-6 py-12 md:grid-cols-3">
     <h2 id="band-titre" class="font-serif text-3xl">Actualités</h2>
     <div>
-      <p class="eyebrow">Boutique en ligne</p>
-      <p class="mt-2 text-lg font-medium">Expédition 100 % offerte !</p>
-      <a href="{SHOP_URL}" class="mt-2 inline-block text-wine underline underline-offset-4">Visitez la boutique</a>
+      <p class="eyebrow">Commander</p>
+      <p class="mt-2 text-lg font-medium">Bon de commande et catalogue des cuvées</p>
+      <a href="{ORDER_URL}" class="mt-2 inline-block text-wine underline underline-offset-4">Commander nos vins</a>
     </div>
     <div>
       <p class="eyebrow">Les rendez-vous</p>
@@ -659,7 +661,7 @@ def build_wines():
     {figure('vins-gamme', "Grappe de grenache noir presque mûre sur la vigne", "Bientôt à maturité !", 'max-w-[240px]', 'w-full h-auto rounded-xl')}
     <div class="prose-sabbat">
       <p>Rosé, blanc, rouges de garde ou vins plaisir sans sulfites ajoutés, et grands Rivesaltes : une gamme complète permettant à chacun de trouver le vin qui lui correspond.</p>
-      <p><a href="{SHOP_URL}">Commander nos vins</a> · <a href="/oenotourisme/">Venir les déguster au domaine</a></p>
+      <p><a href="{ORDER_URL}">Commander nos vins</a> · <a href="/oenotourisme/">Venir les déguster au domaine</a></p>
     </div>
   </div>
   {sections}
@@ -699,7 +701,7 @@ def build_wines():
     <dl class="wine-spec mt-8 grid gap-5 rounded-2xl bg-white p-6 ring-1 ring-ink/5 sm:grid-cols-2">{specs_html}</dl>
     {tasting}
     <div class="mt-10 flex flex-wrap gap-3">
-      <a href="{SHOP_URL}" class="btn-wine">Commander ce vin</a>
+      <a href="{ORDER_URL}" class="btn-wine">Commander ce vin</a>
       <a href="/oenotourisme/" class="btn-ghost">Le déguster au domaine</a>
     </div>
     <nav aria-label="Autres cuvées" class="mt-12 flex justify-between gap-4 border-t border-ink/10 pt-6 text-sm">
@@ -855,18 +857,17 @@ def build_news():
       <li>— <a class="hover:text-wine" href="/les-vins/cuvee-printemps-1900/">Cuvée Printemps 1900' 2018</a></li>
       <li>— <a class="hover:text-wine" href="/les-vins/naughty-by-nature/">Naughty by Nature 2018</a></li>
     </ul>
-    <a href="{SHOP_URL}" class="btn-wine mt-8">Commander</a>
+    <a href="{ORDER_URL}" class="btn-wine mt-8">Commander</a>
   </article>
   <article class="rounded-3xl bg-ink p-6 text-cream sm:p-8">
-    <p class="eyebrow !text-ochre-light">E-boutique</p>
-    <h2 class="mt-2 font-serif text-3xl">La boutique en ligne évolue : frais de port offerts !*</h2>
-    <p class="mt-4 text-cream/75">Commandez vos vins directement au domaine, livrés chez vous en France métropolitaine.</p>
-    <a href="{SHOP_URL}" class="btn-ochre mt-8">Accéder à la boutique</a>
-    <p class="mt-8 text-xs text-cream/50">* Sauf tarifs préférentiels : applicable uniquement sur les ventes à distance au tarif grand public.</p>
+    <p class="eyebrow !text-ochre-light">Commander</p>
+    <h2 class="mt-2 font-serif text-3xl">Commandez directement au domaine</h2>
+    <p class="mt-4 text-cream/75">Téléchargez le bon de commande, remplissez-le et renvoyez-le-nous par e-mail : nous préparons votre commande et vous confirmons les modalités de livraison.</p>
+    <a href="{ORDER_URL}" class="btn-ochre mt-8">Bon de commande</a>
   </article>
 </div>"""
     page("/actualite/", "Actualité — salons, nouveautés et millésimes",
-         "Salons, nouveaux millésimes et offres de la boutique en ligne du Domaine de Sabbat, vigneron bio et nature à Latour-de-France.",
+         "Salons, nouveaux millésimes et offres du Domaine de Sabbat, vigneron bio et nature à Latour-de-France.",
          body, crumbs=[("Accueil", "/"), ("Actualité", "/actualite/")], priority="0.5")
 
 
@@ -890,6 +891,43 @@ def address_card():
   </address>
   <p class="mt-6 rounded-xl bg-cream px-4 py-3 text-sm font-medium">Accueil et visite sur rendez-vous</p>
 </div>"""
+
+
+def build_order():
+    mail = BIZ["email"]
+    def card(href, title, text, primary):
+        if not (SRC / "static" / href.lstrip("/")).exists():
+            return ""
+        cls = "btn-wine" if primary else "btn-ghost"
+        return f"""<div class="rounded-3xl bg-white p-6 ring-1 ring-ink/5 sm:p-8">
+    <h2 class="font-serif text-2xl">{title}</h2>
+    <p class="mt-3 leading-relaxed text-ink/75">{text}</p>
+    <a href="{href}" class="{cls} mt-6" download>Télécharger le PDF</a>
+  </div>"""
+    cards = card(ORDER_PDF, "Bon de commande", "À imprimer ou à remplir à l'écran, puis à nous renvoyer par e-mail.", True)
+    cards += card(CATALOG_PDF, "Catalogue des cuvées", "Toute la gamme : appellations, cépages, millésimes et tarifs.", False)
+    body = page_hero("Commander", "Commander nos vins",
+                     "Le domaine ne propose plus de boutique en ligne : les commandes se font directement auprès du vigneron.")
+    body += f"""<div class="container-x grid gap-6 pb-8 md:grid-cols-2">
+  {cards}
+</div>
+<div class="container-x pb-16">
+  <div class="rounded-3xl bg-ink p-6 text-cream sm:p-8">
+    <h2 class="font-serif text-2xl">Comment commander ?</h2>
+    <ol class="mt-4 list-decimal space-y-2 pl-5 text-cream/80">
+      <li>Choisissez vos cuvées dans <a class="underline" href="/les-vins/">la gamme</a>{" ou le catalogue" if (SRC / "static" / CATALOG_PDF.lstrip("/")).exists() else ""}.</li>
+      <li>Remplissez le bon de commande.</li>
+      <li>Envoyez-le à <a class="text-ochre-light underline" href="mailto:{mail}?subject=Commande">{mail}</a>.</li>
+      <li>Nous vous confirmons la commande, le montant et la livraison.</li>
+    </ol>
+    <p class="mt-6 text-sm text-cream/70">Minimum 6 bouteilles par commande · livraison en France métropolitaine · paiement par chèque ou virement, expédition dès réception du règlement.</p>
+    <p class="mt-4 text-cream/80">Une question ? Appelez-nous au <a class="underline" href="tel:{BIZ['mobile_tel']}">{BIZ['mobile']}</a> ou passez au domaine, sur rendez-vous.</p>
+    <a href="mailto:{mail}?subject=Commande" class="btn-ochre mt-6">Écrire au domaine</a>
+  </div>
+</div>"""
+    page(ORDER_URL, "Commander nos vins — bon de commande et catalogue",
+         "Commandez les vins du Domaine de Sabbat directement au domaine : bon de commande et catalogue des cuvées à télécharger, à renvoyer par e-mail.",
+         body, crumbs=[("Accueil", "/"), ("Commander", ORDER_URL)], priority="0.7")
 
 
 def build_access():
@@ -970,7 +1008,7 @@ def build_meta_files():
     redirects = {
         "/présentation/": "/presentation/", "/actualité/": "/actualite/", "/plan-d-accès/": "/plan-d-acces/",
         "/infos-légales/": "/mentions-legales/", "/sitemap/": "/sitemap.xml",
-        "/e-boutique/": SHOP_URL, "/visites/": "/oenotourisme/", "/visite/": "/oenotourisme/", "/degustation/": "/oenotourisme/",
+        "/e-boutique/": ORDER_URL, "/visites/": "/oenotourisme/", "/visite/": "/oenotourisme/", "/degustation/": "/oenotourisme/",
     }
     for w in WINES:
         if w["old"] != w["slug"]:
@@ -999,7 +1037,7 @@ def build_meta_files():
 - [Les vins]({SITE}/les-vins/): 11 cuvées
 - [Présentation]({SITE}/presentation/)
 - [Technique : terroir, vignoble, cave]({SITE}/technique/)
-- [E-boutique]({SHOP_URL})
+- [Commander]({SITE}/commander/): bon de commande PDF à renvoyer par e-mail
 - [Contact]({SITE}/contact/): {BIZ['mobile']}, {BIZ['email']}
 """, encoding="utf-8")
 
@@ -1011,7 +1049,10 @@ def copy_assets():
     (DIST / "assets").mkdir(exist_ok=True)
     shutil.copy2(SRC / "js" / "main.js", DIST / "assets" / "main.js")
     for p in (SRC / "static").iterdir():
-        shutil.copy2(p, DIST / p.name)
+        if p.is_dir():
+            shutil.copytree(p, DIST / p.name)
+        else:
+            shutil.copy2(p, DIST / p.name)
 
 
 if __name__ == "__main__":
@@ -1020,6 +1061,6 @@ if __name__ == "__main__":
             shutil.rmtree(p) if p.is_dir() else p.unlink()
     copy_assets()
     build_home(); build_presentation(); build_technique(); build_wines(); build_actors()
-    build_oenotourisme(); build_news(); build_access(); build_contact(); build_legal(); build_404()
+    build_oenotourisme(); build_news(); build_order(); build_access(); build_contact(); build_legal(); build_404()
     build_meta_files()
     print(f"{len(PAGES)} pages indexables générées dans dist/")
