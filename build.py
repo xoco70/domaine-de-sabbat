@@ -1030,7 +1030,8 @@ def map_block():
 </div>"""
 
 
-def address_card():
+def address_card(with_button=True):
+    button = (f'<a class="btn-wine mt-6" href="{VINYAQUI_URL}" target="_blank" rel="noopener">Réserver une visite sur Viny\'aquí</a>') if with_button else ""
     return f"""<div class="rounded-3xl bg-white p-6 ring-1 ring-ink/5 sm:p-8">
   <h2 class="font-serif text-3xl">{BIZ['name']}</h2>
   <address class="mt-4 space-y-1 not-italic leading-relaxed">
@@ -1040,7 +1041,7 @@ def address_card():
     <p>Fax : {BIZ['fax']}</p>
     <p>E-mail : <a class="text-wine underline" href="mailto:{BIZ['email']}">{BIZ['email']}</a></p>
   </address>
-  <a class="btn-wine mt-6" href="{VINYAQUI_URL}" target="_blank" rel="noopener">Réserver une visite sur Viny'aquí</a>
+  {button}
 </div>"""
 
 
@@ -1087,7 +1088,7 @@ def build_access():
     body += f"""<div class="container-x grid gap-8 pb-16 lg:grid-cols-[1.6fr_1fr]">
   {map_block()}
   <div class="space-y-6">
-    {address_card()}
+    {address_card(with_button=False)}
     <div class="flex flex-wrap gap-3">
       <a class="btn-wine" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&amp;destination={BIZ['lat']},{BIZ['lng']}">Itinéraire Google Maps ↗</a>
       <a class="btn-ghost" href="/oenotourisme/">Réserver une visite</a>
