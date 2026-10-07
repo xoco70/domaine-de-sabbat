@@ -352,7 +352,6 @@ def header(current):
   <nav id="mobile-menu" aria-label="Navigation mobile" class="h-[calc(100dvh-4rem)] overflow-y-auto border-t border-ink-line bg-ink px-4 pb-10 pt-2 lg:hidden" hidden>
     {mobile}
     <a href="{CTA[1]}" class="btn-ochre mt-6 w-full">{CTA[0]}</a>
-    <p class="mt-6 text-sm text-cream/60">Accueil et visite sur rendez-vous<br><a class="underline" href="tel:{BIZ['mobile_tel']}">{BIZ['mobile']}</a></p>
   </nav>
 </header>"""
 
@@ -1041,7 +1040,7 @@ def address_card():
     <p>Fax : {BIZ['fax']}</p>
     <p>E-mail : <a class="text-wine underline" href="mailto:{BIZ['email']}">{BIZ['email']}</a></p>
   </address>
-  <p class="mt-6 rounded-xl bg-cream px-4 py-3 text-sm font-medium">Accueil et visite sur rendez-vous</p>
+  <a class="btn-wine mt-6" href="{VINYAQUI_URL}" target="_blank" rel="noopener">Réserver une visite sur Viny'aquí</a>
 </div>"""
 
 
