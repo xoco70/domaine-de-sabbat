@@ -39,10 +39,15 @@ jobs:
           BASE="/${GITHUB_REPOSITORY#*/}"
           find dist -name '*.html' -print0 | xargs -0 perl -pi -e "s{\b(href|src)=\"/(?!/)}{\$1=\"$BASE/}g"
 
-      - name: Custom domain + no Jekyll
+      # Cette préversion (xoco70.github.io/domaine-de-sabbat/) ne doit pas être indexée :
+      # la production est servie depuis dist/ sur www.domainedesabbat.fr (IONOS).
+      - name: Préversion non indexable
         run: |
-          echo "www.domainedesabbat.fr" > dist/CNAME
-          touch dist/.nojekyll
+          find dist -name '*.html' -print0 | xargs -0 perl -pi -e 's{<meta name="robots" content="[^"]*">}{<meta name="robots" content="noindex, nofollow">}g'
+          printf 'User-agent: *\nDisallow: /\n' > dist/robots.txt
+
+      - name: No Jekyll
+        run: touch dist/.nojekyll
 
       - uses: actions/configure-pages@v5
 

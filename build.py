@@ -5,6 +5,7 @@ Produit dist/ : une page HTML par URL (index.html dans un dossier = URL propre),
 images, sitemap.xml, robots.txt, .htaccess (redirections 301 depuis l'ancien site).
 Le CSS est ensuite compilé par Tailwind (voir package.json).
 """
+import hashlib
 import json
 import shutil
 import struct
@@ -17,6 +18,7 @@ SRC = ROOT / "src"
 DIST = ROOT / "dist"
 SITE = "https://www.domainedesabbat.fr"
 TODAY = date.today().isoformat()
+LASTMOD_FILE = ROOT / "lastmod.json"  # url -> {hash, date} : lastmod du sitemap = date du dernier changement réel
 
 BIZ = {
     "name": "Domaine de Sabbat",
@@ -314,7 +316,6 @@ WINERY = {
     "knowsAbout": ["Vin nature", "Vin biologique", "Côtes du Roussillon", "Rivesaltes", "Œnotourisme", "Vallée de l'Agly"],
     "makesOffer": {"@type": "Offer", "name": "Visite de cave et dégustation de vin nature", "url": f"{SITE}/oenotourisme/",
                    "price": "3", "priceCurrency": "EUR"},
-    "sameAs": [VINYAQUI_URL],
 }
 
 
@@ -400,6 +401,8 @@ def footer():
       <h2 class="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-ochre-light">Le site</h2>
       <ul class="mt-4 space-y-2 text-sm">{cols}
         <li><a class="hover:text-cream" href="/oenotourisme/">Œnotourisme</a></li>
+        <li><a class="hover:text-cream" href="/oenotourisme/vallee-de-l-agly/">Vallée de l'Agly</a></li>
+        <li><a class="hover:text-cream" href="/en/wine-tasting-roussillon/" hreflang="en" lang="en">Wine tasting (English)</a></li>
         <li><a class="hover:text-cream" href="/plan-d-acces/">Plan d'accès</a></li>
         <li><a class="hover:text-cream" href="/mentions-legales/">Mentions légales</a></li>
       </ul>
@@ -429,7 +432,17 @@ def crumbs_html(crumbs):
 PAGES = []  # (url, priority, alternates hreflang)
 
 
-def page(url, title, desc, body, crumbs=None, ld=None, og_image="/og-domaine-de-sabbat.jpg",
+EN_LABELS = {
+    ">Aller au contenu<": ">Skip to content<",
+    'aria-label="Ouvrir le menu"': 'aria-label="Open menu"',
+    'aria-label="Fil d\'Ariane"': 'aria-label="Breadcrumb"',
+    ">Réserver sur Viny'aquí<": ">Book on Viny'aquí<",
+    "L'abus d'alcool est dangereux pour la santé, à consommer avec modération.": "Alcohol abuse is dangerous for your health. Please drink responsibly.",
+}
+OG_DEFAULT = "/og-domaine-de-sabbat.jpg"
+
+
+def page(url, title, desc, body, crumbs=None, ld=None, og_image=OG_DEFAULT,
          og_type="website", priority="0.7", head_extra="", noindex=False, lang="fr", alternates=None):
     crumbs = crumbs or [("Accueil", "/")]
     ld = list(ld or [])
@@ -437,6 +450,11 @@ def page(url, title, desc, body, crumbs=None, ld=None, og_image="/og-domaine-de-
         ld.append(breadcrumbs_ld(crumbs))
     full_title = title if ("Domaine de Sabbat" in title or len(title) > 42) else f"{title} | Domaine de Sabbat"
     canonical = f"{SITE}{url}"
+    # Pas de canonical ni d'og:url sur une page noindex (la 404 n'a pas d'URL propre).
+    canonical_tags = "" if noindex else f'<link rel="canonical" href="{canonical}">\n<meta property="og:url" content="{canonical}">'
+    og_locale_alt = "".join(f'<meta property="og:locale:alternate" content="{ {"fr": "fr_FR", "en": "en_GB"}[hl] }">'
+                            for hl, _ in (alternates or []) if hl in ("fr", "en") and hl != lang)
+    og_size = '<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">' if og_image == OG_DEFAULT else ""
     alt_links = "".join(f'<link rel="alternate" hreflang="{hl}" href="{SITE}{u}">' for hl, u in (alternates or []))
     og_locale = {"fr": "fr_FR", "en": "en_GB"}[lang]
     robots = "noindex, follow" if noindex else "index, follow, max-image-preview:large"
@@ -448,16 +466,17 @@ def page(url, title, desc, body, crumbs=None, ld=None, og_image="/og-domaine-de-
 <title>{escape(full_title)}</title>
 <meta name="description" content="{escape(desc)}">
 <meta name="robots" content="{robots}">
-<link rel="canonical" href="{canonical}">
+{canonical_tags}
 {alt_links}
 <meta name="theme-color" content="#15120f">
 <meta property="og:type" content="{og_type}">
 <meta property="og:locale" content="{og_locale}">
+{og_locale_alt}
 <meta property="og:site_name" content="Domaine de Sabbat">
 <meta property="og:title" content="{escape(full_title)}">
 <meta property="og:description" content="{escape(desc)}">
-<meta property="og:url" content="{canonical}">
 <meta property="og:image" content="{SITE}{og_image}">
+{og_size}
 <meta property="og:image:alt" content="{escape(full_title)}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="geo.region" content="FR-66">
@@ -467,7 +486,7 @@ def page(url, title, desc, body, crumbs=None, ld=None, og_image="/og-domaine-de-
 <link rel="icon" href="/favicon.png" sizes="16x16" type="image/png">
 <link rel="stylesheet" href="/assets/site.css">
 {head_extra}
-{jsonld(WINERY) if url == '/' else ''}
+{jsonld(WINERY) if url in ('/', '/oenotourisme/', '/en/wine-tasting-roussillon/') else ''}
 {''.join(jsonld(x) for x in ld)}
 </head>
 <body class="flex min-h-screen flex-col">
@@ -482,11 +501,14 @@ def page(url, title, desc, body, crumbs=None, ld=None, og_image="/og-domaine-de-
 </body>
 </html>
 """
+    if lang == "en":
+        for fr, en in EN_LABELS.items():
+            html_doc = html_doc.replace(fr, en)
     out = DIST / url.strip("/") / "index.html" if url.endswith("/") else DIST / url
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html_doc, encoding="utf-8")
     if not noindex:
-        PAGES.append((url, priority, alternates))
+        PAGES.append((url, alternates, hashlib.sha256(html_doc.encode()).hexdigest()))
 
 
 def page_hero(eyebrow, h1, intro=None, dark=False):
@@ -507,14 +529,14 @@ def vinyaqui_widget():
         <div id="vinyaqui-widget"></div>
         <a class="vinyaqui-backlink" href="{VINYAQUI_URL}" target="_blank" rel="noopener">{VINYAQUI_ANCHOR}</a>
         <link rel="stylesheet" href="https://vinyaqui.com/widget/booking-widget.css?v=1.4">
-        <script
+        <script defer
           src="https://vinyaqui.com/widget/booking-widget.js?v=1.4"
           data-api-base="https://vinyaqui.com/api"
           data-activity="visite-de-la-cave-et-degustation-de-vin-nature-au-domaine-de-sabbat"
           data-api-key="vk_brM50cZ7UtUDW5ZNkVIW6wPjn5BJJTbayzlrAZGHJuyLOC9nzJCWDppRKrt9"
           data-target="#vinyaqui-widget"
         ></script>
-        <noscript><p class="mt-4"><a class="btn-wine" href="{VINYAQUI_URL}">Réserver sur Viny'aquí</a></p></noscript>"""
+        <noscript><p class="mt-4"><a class="btn-wine" href="{VINYAQUI_URL}" target="_blank" rel="noopener">Réserver sur Viny'aquí</a></p></noscript>"""
 
 
 def visit_cta(compact=False, widget=False):
@@ -639,7 +661,7 @@ def build_home():
 """
     page("/", "Domaine de Sabbat — Vins nature, Latour-de-France (66)",
          "Vigneron bio et nature à Latour-de-France (66), Vallée de l'Agly : Côtes du Roussillon, Rivesaltes. Visite de cave et dégustation de vin nature à 3 € par personne.",
-         body, priority="1.0")
+         body, priority="1.0", head_extra='<link rel="preconnect" href="https://vinyaqui.com">')
 
 
 def build_presentation():
@@ -727,16 +749,6 @@ def build_wines():
         specs_html = "".join(f"<div><dt>{k}</dt><dd>{v}</dd></div>" for k, v in specs if v)
         tasting = f"""<h2 class="mt-10 font-serif text-3xl text-ink">Dégustation</h2><p class="mt-3 font-serif text-xl italic leading-relaxed text-ink/80">{w['tasting']}</p>""" if w["tasting"] else ""
         prev_w, next_w = WINES[i - 1], WINES[(i + 1) % len(WINES)]
-        product = {
-            "@context": "https://schema.org", "@type": "Product",
-            "name": w["name"], "category": f"Vin {w['color'].lower()}",
-            "description": f"{w['name']}, {w['appellation']}. {w['label']}. Cépages : {w['cepages']}.",
-            "image": f"{SITE}/img/{w['img']}.webp",
-            "brand": {"@type": "Brand", "name": "Domaine de Sabbat"},
-            "manufacturer": {"@id": WINERY_ID},
-            "countryOfOrigin": "FR",
-            "additionalProperty": [{"@type": "PropertyValue", "name": k, "value": v} for k, v in specs if v],
-        }
         body = f"""
 <article class="container-x grid gap-10 pb-16 pt-8 md:grid-cols-[1fr_1.15fr] lg:gap-16">
   <div class="md:sticky md:top-28 md:self-start">
@@ -765,7 +777,7 @@ def build_wines():
         page(f"/les-vins/{w['slug']}/", f"{w['name']} — {w['appellation'].replace('Côtes du Roussillon Villages', 'Côtes du Roussillon Vill.') if len(w['name']) > 18 else w['appellation']}",
              wine_meta(w),
              body, crumbs=[("Accueil", "/"), ("Les vins", "/les-vins/"), (w["name"], f"/les-vins/{w['slug']}/")],
-             ld=[product], og_type="product", priority="0.7")
+             og_type="product", priority="0.7")
 
 
 def build_actors():
@@ -834,6 +846,7 @@ def build_oenotourisme():
         <li class="rounded-xl border border-cream/20 p-3"><span class="block text-cream/60">Langues</span>FR · EN · ES</li>
       </ul>
       <a href="#reserver" class="btn-ochre mt-8">Voir les disponibilités</a>
+      <p class="mt-4 text-sm text-cream/70"><a class="underline underline-offset-4 hover:text-cream" href="/en/wine-tasting-roussillon/" hreflang="en" lang="en">English version</a></p>
     </div>
     {img('visite-embouteillage', "Barriques de chêne et bouteilles fraîchement tirées dans le chai du Domaine de Sabbat", 'mx-auto aspect-[16/10] w-full rounded-2xl object-cover md:aspect-[4/5] md:max-w-sm', eager=True)}
   </div>
@@ -880,7 +893,6 @@ def build_oenotourisme():
     page("/oenotourisme/", "Dégustation de vin nature et visite de cave, Latour-de-France",
          "Dégustation de vins nature chez le vigneron à Latour-de-France, près de Perpignan : visite de cave, 4 à 8 vins, 1 h 30, 3 € par personne. Réservation en ligne.",
          body, crumbs=[("Accueil", "/"), ("Œnotourisme", "/oenotourisme/")], ld=[trip_ld, faq_ld], priority="0.9",
-         og_image="/img/visite-embouteillage.webp",
          alternates=[("fr", "/oenotourisme/"), ("en", "/en/wine-tasting-roussillon/"), ("x-default", "/oenotourisme/")],
          head_extra='<link rel="preconnect" href="https://vinyaqui.com">')
     # La page se gère avec son propre fil d'Ariane sous le hero : on retire celui du gabarit.
@@ -927,7 +939,7 @@ def build_agly_guide():
     page("/oenotourisme/vallee-de-l-agly/", "Que faire dans la Vallée de l'Agly ? Guide et dégustation",
          "Guide de la Vallée de l'Agly autour de Latour-de-France : Maury, Tautavel, Vingrau, châteaux cathares et dégustation de vin nature chez le vigneron.",
          body, crumbs=[("Accueil", "/"), ("Œnotourisme", "/oenotourisme/"), ("Vallée de l'Agly", "/oenotourisme/vallee-de-l-agly/")],
-         priority="0.8", og_image="/img/vignoble.webp")
+         priority="0.8")
 
 
 def build_en_tasting():
@@ -977,7 +989,7 @@ def build_en_tasting():
     page("/en/wine-tasting-roussillon/", "Natural wine tasting & cellar visit near Perpignan",
          "Natural wine tasting at a winemaker's cellar in Latour-de-France, near Perpignan: 4 to 8 organic wines, 1 h 30, €3 per person. Book online, English spoken.",
          body, crumbs=[("Home", "/"), ("Wine tasting", "/en/wine-tasting-roussillon/")], ld=[faq_ld], priority="0.8",
-         og_image="/img/visite-embouteillage.webp", lang="en",
+         lang="en",
          alternates=[("fr", "/oenotourisme/"), ("en", "/en/wine-tasting-roussillon/"), ("x-default", "/oenotourisme/")],
          head_extra='<link rel="preconnect" href="https://vinyaqui.com">')
 
@@ -1139,9 +1151,16 @@ def build_404():
 # --------------------------------------------------------------------------- fichiers techniques
 
 def build_meta_files():
-    def sm_entry(u, p, alts):
+    known = json.loads(LASTMOD_FILE.read_text(encoding="utf-8")) if LASTMOD_FILE.exists() else {}
+    lastmod = {}
+    for u, _, digest in PAGES:
+        prev = known.get(u, {})
+        lastmod[u] = prev if prev.get("hash") == digest else {"hash": digest, "date": TODAY}
+    LASTMOD_FILE.write_text(json.dumps(lastmod, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+
+    def sm_entry(u, alts, _digest):
         xl = "".join(f'<xhtml:link rel="alternate" hreflang="{hl}" href="{SITE}{au}"/>' for hl, au in (alts or []))
-        return f"<url><loc>{SITE}{u}</loc><lastmod>{TODAY}</lastmod><priority>{p}</priority>{xl}</url>\n"
+        return f"<url><loc>{SITE}{u}</loc><lastmod>{lastmod[u]['date']}</lastmod>{xl}</url>\n"
     urls = "".join(sm_entry(*e) for e in PAGES)
     (DIST / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
@@ -1173,6 +1192,7 @@ def build_meta_files():
               "<IfModule mod_deflate.c>", "  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml application/xml", "</IfModule>"]
     (DIST / ".htaccess").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
+    wine_links = "".join(f"  - [{w['name']}]({SITE}/les-vins/{w['slug']}/): {w['appellation']}\n" for w in WINES)
     (DIST / "llms.txt").write_text(f"""# Domaine de Sabbat
 
 > Domaine viticole familial de 11 ha en Vallée de l'Agly (Pyrénées-Orientales), fondé en 2008 par Sylvain Lejeune. Vins biologiques et vins nature : Côtes du Roussillon, Côtes du Roussillon Villages, I.G.P. Côtes Catalanes, Vin de France et Rivesaltes. Cave à Latour-de-France (66720).
@@ -1182,9 +1202,11 @@ def build_meta_files():
 - [Guide de la Vallée de l'Agly]({SITE}/oenotourisme/vallee-de-l-agly/): que faire autour de Latour-de-France
 - [Wine tasting & cellar visit (EN)]({SITE}/en/wine-tasting-roussillon/): natural wine tasting near Perpignan, €3 per person
 - [Les vins]({SITE}/les-vins/): 11 cuvées
+{wine_links}- [Les acteurs]({SITE}/les-acteurs/): le vigneron et les partenaires du domaine
 - [Présentation]({SITE}/presentation/)
 - [Technique : terroir, vignoble, cave]({SITE}/technique/)
 - [Commander]({SITE}/commander/): bon de commande PDF à renvoyer par e-mail
+- [Plan d'accès]({SITE}/plan-d-acces/): {BIZ['street']}, {BIZ['zip']} {BIZ['city']}, accueil sur rendez-vous
 - [Contact]({SITE}/contact/): {BIZ['mobile']}, {BIZ['email']}
 """, encoding="utf-8")
 
