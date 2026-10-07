@@ -952,25 +952,41 @@ def build_en_tasting():
     faq_ld = {"@context": "https://schema.org", "@type": "FAQPage",
               "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]}
     faq_html = "".join(f"""
-<details class="group rounded-2xl bg-white p-5 ring-1 ring-ink/5"><summary class="cursor-pointer list-none font-medium">{escape(q)}</summary><p class="mt-3 leading-relaxed text-ink/75">{escape(a)}</p></details>""" for q, a in faq)
+<details class="group rounded-2xl bg-white p-5 ring-1 ring-ink/5 open:shadow-sm">
+  <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-medium">{escape(q)}<span class="text-wine transition group-open:rotate-45" aria-hidden="true">+</span></summary>
+  <p class="mt-3 leading-relaxed text-ink/75">{escape(a)}</p>
+</details>""" for q, a in faq)
     body = f"""
 <section class="bg-ink text-cream">
-  <div class="container-x py-12 lg:py-16">
-    <p class="eyebrow !text-ochre-light">Wine tourism · Roussillon · South of France</p>
-    <h1 class="mt-4 max-w-3xl text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">Natural wine tasting &amp; cellar visit near Perpignan</h1>
-    <p class="mt-6 max-w-2xl text-lg leading-relaxed text-cream/80">Visit the cellar of an organic and natural winery in Latour-de-France, in the Agly Valley, and taste 4 to 8 wines with the winemaker. 1 h 30, €3 per person, in English, French or Spanish.</p>
-    <a href="#book" class="btn-ochre mt-8">Check availability</a>
+  <div class="container-x grid items-center gap-10 py-12 md:grid-cols-[1.25fr_1fr] lg:py-16">
+    <div>
+      <p class="eyebrow !text-ochre-light">Wine tourism · Latour-de-France</p>
+      <h1 class="mt-4 text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">Cellar visit &amp; natural wine tasting</h1>
+      <p class="mt-6 max-w-xl text-lg leading-relaxed text-cream/80">At the foot of the Catalan Corbières, Domaine de Sabbat opens its doors for a sensory immersion in the heart of the Catalan terroir: the cellar, natural winemaking, and the wines, with the person who makes them.</p>
+      <ul class="mt-6 grid max-w-md grid-cols-2 gap-3 text-sm">
+        <li class="rounded-xl border border-cream/20 p-3"><span class="block text-cream/60">Duration</span>1 h 30</li>
+        <li class="rounded-xl border border-cream/20 p-3"><span class="block text-cream/60">Price</span>€3 / person</li>
+        <li class="rounded-xl border border-cream/20 p-3"><span class="block text-cream/60">Group</span>1 to 20 people</li>
+        <li class="rounded-xl border border-cream/20 p-3"><span class="block text-cream/60">Languages</span>FR · EN · ES</li>
+      </ul>
+      <a href="#book" class="btn-ochre mt-8">Check availability</a>
+      <p class="mt-4 text-sm text-cream/70"><a class="underline underline-offset-4 hover:text-cream" href="/oenotourisme/" hreflang="fr" lang="fr">Version française</a></p>
+    </div>
+    {img('visite-embouteillage', "Oak barrels and freshly bottled wine in the cellar of Domaine de Sabbat", 'mx-auto aspect-[16/10] w-full rounded-2xl object-cover md:aspect-[4/5] md:max-w-sm', eager=True)}
   </div>
 </section>
+{crumbs_html([("Home", "/"), ("Wine tasting", "/en/wine-tasting-roussillon/")])}
 <div class="container-x grid gap-12 py-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:py-16">
   <div class="prose-sabbat">
     <h2 class="font-serif text-4xl text-ink">An authentic visit at the winemaker's</h2>
     <p class="mt-5">Domaine de Sabbat is a family winery of 11 hectares founded in 2008 by <strong>Sylvain Lejeune</strong>. The vines grow on schist, marl and clay-limestone soils around Maury, Tautavel and Vingrau, at the foot of the Corbières hills. During the visit you discover the cellar and the principles of natural winemaking: no chemical inputs, respect for the grape, the soil and living things.</p>
     <p>The tasting covers a selection of Côtes du Roussillon, Côtes du Roussillon Villages, I.G.P. Côtes Catalanes, natural wines and Rivesaltes, depending on the day.</p>
-    <h3 class="mt-10 font-serif text-2xl text-ink">At a glance</h3>
-    <ul class="mt-4 space-y-2">
-      <li>Duration: 1 h 30</li><li>Price: €3 per person</li><li>Group size: 1 to 20 people</li>
-      <li>Languages: English, French, Spanish</li><li>Wine available to buy on site</li>
+    <h3 class="mt-10 font-serif text-2xl text-ink">Included in the visit</h3>
+    <ul class="mt-4 space-y-3">
+      <li class="flex gap-3"><span class="mt-1 text-wine" aria-hidden="true">✦</span><span>Discovery of the cellar and the winemaking steps</span></li>
+      <li class="flex gap-3"><span class="mt-1 text-wine" aria-hidden="true">✦</span><span>Guided tasting of 4 to 8 wines from the estate</span></li>
+      <li class="flex gap-3"><span class="mt-1 text-wine" aria-hidden="true">✦</span><span>Direct exchange with the winemaker</span></li>
+      <li class="flex gap-3"><span class="mt-1 text-wine" aria-hidden="true">✦</span><span>Wine available to buy on site</span></li>
     </ul>
     <p class="mt-6 text-sm text-stone">Address: 24 boulevard Carnot, 66720 Latour-de-France — <a href="/plan-d-acces/">directions (in French)</a>. Also available as a gift card.</p>
   </div>
@@ -982,8 +998,10 @@ def build_en_tasting():
     </div>
   </section>
 </div>
-<section class="container-x pb-16"><h2 class="font-serif text-4xl">Frequently asked questions</h2><div class="mt-8 grid gap-4 lg:grid-cols-2">{faq_html}</div>
-  <p class="mt-8"><a class="text-wine underline" href="/oenotourisme/">Version française</a></p></section>
+<section aria-labelledby="faq" class="container-x pb-16">
+  <h2 id="faq" class="font-serif text-4xl">Frequently asked questions</h2>
+  <div class="mt-8 grid gap-4 lg:grid-cols-2">{faq_html}</div>
+</section>
 """
     page("/en/wine-tasting-roussillon/", "Natural wine tasting & cellar visit near Perpignan",
          "Natural wine tasting at a winemaker's cellar in Latour-de-France, near Perpignan: 4 to 8 organic wines, 1 h 30, €3 per person. Book online, English spoken.",
@@ -991,6 +1009,11 @@ def build_en_tasting():
          lang="en",
          alternates=[("fr", "/oenotourisme/"), ("en", "/en/wine-tasting-roussillon/"), ("x-default", "/oenotourisme/")],
          head_extra='<link rel="preconnect" href="https://vinyaqui.com">')
+    # Même gabarit que la page FR : fil d'Ariane sous le hero uniquement.
+    out = DIST / "en" / "wine-tasting-roussillon" / "index.html"
+    html_doc = out.read_text(encoding="utf-8")
+    first = crumbs_html([("Home", "/"), ("Wine tasting", "/en/wine-tasting-roussillon/")]).replace("Fil d\'Ariane", "Breadcrumb")
+    out.write_text(html_doc.replace(first, "", 1), encoding="utf-8")
 
 
 def build_news():
