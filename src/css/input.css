@@ -24,7 +24,7 @@
   .prose-sabbat a { @apply text-wine underline underline-offset-4 hover:text-wine-dark; }
   .nav-link { @apply whitespace-nowrap rounded-full px-2 py-2 text-sm xl:px-3 text-cream/80 transition-colors hover:text-cream; }
   .nav-link[aria-current="page"] { @apply text-ochre-light; }
-  .field { @apply mt-1 block w-full rounded-lg border border-ink/20 bg-white px-4 py-3 text-base text-ink placeholder:text-stone/60 focus:border-wine focus:outline-none focus:ring-2 focus:ring-wine/30; }
+  .field { @apply mt-1 block w-full rounded-lg border border-ink/20 bg-white px-4 py-3 text-base text-ink placeholder:text-stone focus:border-wine focus:outline-none focus:ring-2 focus:ring-wine/30; }
   .wine-spec dt { @apply text-xs font-semibold uppercase tracking-wider text-stone; }
   .wine-spec dd { @apply mt-1 text-ink; }
 }
