@@ -140,7 +140,7 @@ def build_home():
     <p class="mt-5">En concreto, las viñas de la finca se extienden por los terruños de esquistos, margas y arcillo-calizos de los municipios de <strong>Maury, Tautavel y Vingrau</strong>, a los pies de las Corbières catalanas, en el Valle del Agly.</p>
     <p>La bodega de vinificación se encuentra en el corazón del pequeño pueblo mediterráneo de <strong>Latour-de-France</strong>, a 20 km al noroeste de Perpiñán (66), capital de la Cataluña Norte.</p>
     <p>Vin de Pays des Côtes Catalanes rosado, A.O.C. Côtes du Roussillon blanco, Côtes du Roussillon Villages (tinto) y Rivesaltes, elaborados en la bodega de la finca, constituyen una <strong>gama completa</strong> para que cada cual encuentre el vino que le corresponde.</p>
-    <a href="/es/el-dominio/" class="btn-ghost mt-8 !no-underline !text-ink">Descubrir la bodega</a>
+    <a href="/es/el-dominio/" class="btn-ghost mt-8 !no-underline !text-ink hover:!text-cream">Descubrir la bodega</a>
   </div>
 </section>
 
@@ -179,7 +179,7 @@ def build_presentation():
 <p>La bodega se encuentra en el corazón del pequeño y típico pueblo de <strong>Latour-de-France</strong>.</p>
 <div class="mt-8 flex flex-wrap gap-3 not-prose">
   <a href="/es/vinificacion/" class="btn-wine !no-underline !text-cream">Terruño, viñedo y bodega</a>
-  <a href="/es/el-equipo/" class="btn-ghost !no-underline !text-ink">Las personas de la bodega</a>
+  <a href="/es/el-equipo/" class="btn-ghost !no-underline !text-ink hover:!text-cream">Las personas de la bodega</a>
 </div>""",
         B.figure("presentation-syrah", "Brotes jóvenes de Syrah en primavera en las viñas de la finca", "Syrah en primavera"),
     ) + B.visit_cta(compact=True)

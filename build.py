@@ -766,7 +766,7 @@ def build_home():
     <p class="mt-5">Plus précisément, les vignes du domaine s'étendent sur les terroirs de schistes, marnes et argilo-calcaires des communes de <strong>Maury, Tautavel et Vingrau</strong>, au pied des Corbières catalanes, dans la Vallée de l'Agly.</p>
     <p>La cave de vinification se trouve au cœur du petit village méditerranéen de <strong>Latour-de-France</strong>, à 20 km au nord-ouest de Perpignan (66), capitale de la Catalogne du Nord.</p>
     <p>Vins de Pays des Côtes Catalanes rosé, A.O.C. Côtes du Roussillon blanc, Côtes du Roussillon Villages (rouge) et Rivesaltes, élaborés dans la cave du domaine, constituent une <strong>gamme complète</strong> permettant à chacun de trouver le vin qui lui correspond.</p>
-    <a href="/presentation/" class="btn-ghost mt-8 !no-underline !text-ink">Découvrir le domaine</a>
+    <a href="/presentation/" class="btn-ghost mt-8 !no-underline !text-ink hover:!text-cream">Découvrir le domaine</a>
   </div>
 </section>
 
@@ -805,7 +805,7 @@ def build_presentation():
 <p>La cave se situe au cœur du petit village typique de <strong>Latour-de-France</strong>.</p>
 <div class="mt-8 flex flex-wrap gap-3 not-prose">
   <a href="/technique/" class="btn-wine !no-underline !text-cream">Terroir, vignoble &amp; cave</a>
-  <a href="/les-acteurs/" class="btn-ghost !no-underline !text-ink">Les acteurs du domaine</a>
+  <a href="/les-acteurs/" class="btn-ghost !no-underline !text-ink hover:!text-cream">Les acteurs du domaine</a>
 </div>""",
         figure("presentation-syrah", "Jeunes pousses de syrah au printemps dans les vignes du domaine", "Syrah au printemps"),
     ) + visit_cta(compact=True)

@@ -141,7 +141,7 @@ def build_home():
     <p class="mt-5">More precisely, the estate's vines spread across the schist, marl and clay-limestone terroirs of the communes of <strong>Maury, Tautavel and Vingrau</strong>, at the foot of the Catalan Corbières, in the Agly Valley.</p>
     <p>The winery is in the heart of the small Mediterranean village of <strong>Latour-de-France</strong>, 20 km north-west of Perpignan (66), the capital of Northern Catalonia.</p>
     <p>Vin de Pays des Côtes Catalanes rosé, A.O.C. Côtes du Roussillon white, Côtes du Roussillon Villages (red) and Rivesaltes, all made in the estate's own cellar, form a <strong>complete range</strong> so that everyone can find the wine that suits them.</p>
-    <a href="/en/about/" class="btn-ghost mt-8 !no-underline !text-ink">Discover the estate</a>
+    <a href="/en/about/" class="btn-ghost mt-8 !no-underline !text-ink hover:!text-cream">Discover the estate</a>
   </div>
 </section>
 
@@ -180,7 +180,7 @@ def build_presentation():
 <p>The cellar is in the heart of the small, typical village of <strong>Latour-de-France</strong>.</p>
 <div class="mt-8 flex flex-wrap gap-3 not-prose">
   <a href="/en/winemaking/" class="btn-wine !no-underline !text-cream">Terroir, vineyard &amp; cellar</a>
-  <a href="/en/the-team/" class="btn-ghost !no-underline !text-ink">The people behind the estate</a>
+  <a href="/en/the-team/" class="btn-ghost !no-underline !text-ink hover:!text-cream">The people behind the estate</a>
 </div>""",
         B.figure("presentation-syrah", "Young Syrah shoots in spring in the estate's vineyards", "Syrah in spring"),
     ) + B.visit_cta(compact=True)

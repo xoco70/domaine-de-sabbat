@@ -1,7 +1,7 @@
 {
  "/": {
   "date": "2026-10-08",
-  "hash": "d6e4f6cbc3f6603d9d5dbb9c648ce0ef70380ee338c61260c156ff7b00ecfd61"
+  "hash": "9382299236abb414920b5bf9c8a3a68b765984a35eebdd83e487b94fbc5cd1ea"
  },
  "/commander/": {
   "date": "2026-10-08",
@@ -13,11 +13,11 @@
  },
  "/en/": {
   "date": "2026-10-08",
-  "hash": "6b51bd49f6f8d2a344db877ae2277eced85288649c710a4bc1fb0be30ea40748"
+  "hash": "8c55604e9d9ddfe18115eafdb348ecd6de85e75b0daa96b94cfc62c4359583d9"
  },
  "/en/about/": {
   "date": "2026-10-08",
-  "hash": "2b03deb2be5000ec492d5b6f952bef8d987e6d2b8d3a49d0d12ed5516cae514c"
+  "hash": "95a8acdb8b215fbdfc066d61dabf64be4939cbab83e42d59db4635fb8a8f2109"
  },
  "/en/agly-valley/": {
   "date": "2026-10-08",
@@ -113,7 +113,7 @@
  },
  "/es/": {
   "date": "2026-10-08",
-  "hash": "c648c36540431fb7c3412a0a81586afc15e1598b962cf60f6ca2c2370da10bf1"
+  "hash": "b169b5a8894e0d5dc8b8604afe5c27a4c78d17b0b15054fdb946d2457d1f0d42"
  },
  "/es/aviso-legal/": {
   "date": "2026-10-08",
@@ -133,7 +133,7 @@
  },
  "/es/el-dominio/": {
   "date": "2026-10-08",
-  "hash": "f7580f7f26b3dcc1ad6846ef251b6c808f473d8be2933b2e1e749c995c75d897"
+  "hash": "d71c0d258e143750489397d95a9c5ee743ad4c66f6bd7d3a3dfc1e46baac32d3"
  },
  "/es/el-equipo/": {
   "date": "2026-10-08",
@@ -281,7 +281,7 @@
  },
  "/presentation/": {
   "date": "2026-10-08",
-  "hash": "ee4ce94d65c3c55bddfed14ea4b67351f92a82bd61086f8539ada2631d07180c"
+  "hash": "6152958b20a9962c32174bc6ef1351cf277c3da8be2260e02cd3351c51cd78fc"
  },
  "/technique/": {
   "date": "2026-10-08",
