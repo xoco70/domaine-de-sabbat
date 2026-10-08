@@ -42,6 +42,56 @@ ORDER_URL = "/commander/"
 ORDER_PDF = "/docs/bon-de-commande.pdf"
 CATALOG_PDF = "/docs/catalogue-cuvees.pdf"
 
+# --------------------------------------------------------------------------- i18n
+# Le site est généré deux fois (FR à la racine, EN sous /en/). LANG est fixée par la boucle principale.
+LANG = "fr"
+
+
+def L(fr, en):
+    """Renvoie le texte de la langue en cours."""
+    return en if LANG == "en" else fr
+
+
+# URL française -> URL anglaise (les fiches vins et les pages techniques sont ajoutées plus bas).
+URL_EN = {
+    "/": "/en/",
+    "/presentation/": "/en/about/",
+    "/technique/": "/en/winemaking/",
+    "/technique/terroir/": "/en/winemaking/terroir/",
+    "/technique/vignoble/": "/en/winemaking/vineyard/",
+    "/technique/cave/": "/en/winemaking/cellar/",
+    "/les-vins/": "/en/wines/",
+    "/les-acteurs/": "/en/the-team/",
+    "/actualite/": "/en/news/",
+    "/commander/": "/en/order/",
+    "/oenotourisme/": "/en/wine-tasting-roussillon/",
+    "/oenotourisme/vallee-de-l-agly/": "/en/agly-valley/",
+    "/plan-d-acces/": "/en/directions/",
+    "/contact/": "/en/contact/",
+    "/mentions-legales/": "/en/legal-notice/",
+    "404.html": "/en/404.html",
+}
+URL_FR = {en: fr for fr, en in URL_EN.items()}
+
+
+def U(fr_path):
+    """Chemin interne dans la langue en cours (on lui passe toujours le chemin français)."""
+    if LANG == "fr":
+        return fr_path
+    if fr_path.startswith("/les-vins/") and fr_path != "/les-vins/":
+        return "/en/wines/" + fr_path[len("/les-vins/"):]
+    return URL_EN.get(fr_path, fr_path)
+
+
+def counterpart(url):
+    """URL de la même page dans l'autre langue (None si elle n'existe pas)."""
+    if url.startswith("/en/wines/") and url != "/en/wines/":
+        return "/les-vins/" + url[len("/en/wines/"):]
+    if url.startswith("/les-vins/") and url != "/les-vins/":
+        return "/en/wines/" + url[len("/les-vins/"):]
+    return URL_FR.get(url) or URL_EN.get(url)
+
+
 VINYAQUI_URL = "https://vinyaqui.com/activities/visite-de-la-cave-et-degustation-de-vin-nature-au-domaine-de-sabbat"
 
 
@@ -255,6 +305,17 @@ NAV = [
 ]
 CTA = ("Visites & dégustations", "/oenotourisme/")
 
+NAV_EN = [
+    ("The estate", "/en/about/"),
+    ("Winemaking", "/en/winemaking/"),
+    ("Wines", "/en/wines/"),
+    ("The team", "/en/the-team/"),
+    ("News", "/en/news/"),
+    ("Order", "/en/order/"),
+    ("Contact", "/en/contact/"),
+]
+CTA_EN = ("Visits & tastings", "/en/wine-tasting-roussillon/")
+
 FAQ = [
     ("Comment se déroule la visite du Domaine de Sabbat ?",
      "La visite commence dans la cave, à Latour-de-France, où le vigneron présente les étapes de la vinification naturelle, sans intrants chimiques. Elle se poursuit par une dégustation commentée de 4 à 8 vins du domaine, en échange direct avec le vigneron sur ses pratiques culturales et sa philosophie."),
@@ -319,6 +380,10 @@ WINERY = {
 }
 
 
+WINERY_DESC_EN = ("11-hectare winery in the Agly Valley (Roussillon): organic and natural wines, Côtes du Roussillon, "
+                  "Côtes du Roussillon Villages and Rivesaltes. Cellar visits and tastings by reservation.")
+
+
 def breadcrumbs_ld(crumbs):
     return {
         "@context": "https://schema.org",
@@ -330,28 +395,50 @@ def breadcrumbs_ld(crumbs):
     }
 
 
+def lang_switcher(current, cls=""):
+    """Sélecteur FR | EN : la langue courante est un texte, l'autre un lien vers la même page."""
+    other = counterpart(current)
+    items = []
+    for code, home in (("fr", "/"), ("en", "/en/")):
+        if code == LANG:
+            items.append(f'<span class="font-semibold text-cream" aria-current="true">{code.upper()}</span>')
+        else:
+            href = other or home
+            label = "Voir cette page en français" if code == "fr" else "View this page in English"
+            items.append(f'<a href="{href}" hreflang="{code}" lang="{code}" class="text-cream/60 hover:text-cream" aria-label="{label}">{code.upper()}</a>')
+    sep = '<span class="text-cream/30" aria-hidden="true">|</span>'
+    return f'<div class="flex items-center gap-2 text-xs tracking-wider {cls}">{sep.join(items)}</div>'
+
+
 def header(current):
+    nav, cta = (NAV_EN, CTA_EN) if LANG == "en" else (NAV, CTA)
+    home = "/en/" if LANG == "en" else "/"
+
     def link(label, href, cls):
-        cur = ' aria-current="page"' if current.startswith(href) and href != "/" else ""
+        cur = ' aria-current="page"' if current.startswith(href) and href not in ("/", "/en/") else ""
         return f'<a href="{href}" class="{cls}"{cur}>{label}</a>'
 
-    desktop = "".join(link(l, h, "nav-link") for l, h in NAV)
-    mobile = "".join(link(l, h, "nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line") for l, h in NAV)
+    desktop = "".join(link(l, h, "nav-link") for l, h in nav)
+    mobile = "".join(link(l, h, "nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line") for l, h in nav)
     return f"""
 <a href="#contenu" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded focus:bg-cream focus:px-4 focus:py-2">Aller au contenu</a>
 <header id="site-header" class="sticky top-0 z-50 bg-ink/95 text-cream backdrop-blur transition-shadow">
   <div class="container-x flex h-16 items-center justify-between gap-4 lg:h-20">
-    <a href="/" class="font-serif text-2xl font-semibold leading-none tracking-wide [font-variant:small-caps] lg:text-[1.7rem]" aria-label="Domaine de Sabbat — accueil">Domaine de Sabbat</a>
+    <a href="{home}" class="font-serif text-2xl font-semibold leading-none tracking-wide [font-variant:small-caps] lg:text-[1.7rem]" aria-label="{L("Domaine de Sabbat — accueil", "Domaine de Sabbat — home")}">Domaine de Sabbat</a>
     <nav aria-label="Navigation principale" class="hidden items-center gap-0.5 lg:flex xl:gap-1">{desktop}
-      <a href="{CTA[1]}" class="ml-2 whitespace-nowrap rounded-full border border-cream/30 px-3.5 py-1.5 text-sm text-cream/80 transition-colors hover:border-cream hover:text-cream"{' aria-current="page"' if current.startswith(CTA[1]) else ''}>{CTA[0]}</a>
+      <a href="{cta[1]}" class="ml-2 whitespace-nowrap rounded-full border border-cream/30 px-3.5 py-1.5 text-sm text-cream/80 transition-colors hover:border-cream hover:text-cream"{' aria-current="page"' if current.startswith(cta[1]) else ''}>{cta[0]}</a>
+      {lang_switcher(current, "ml-3")}
     </nav>
-    <button id="menu-toggle" type="button" class="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-full lg:hidden" aria-controls="mobile-menu" aria-expanded="false" aria-label="Ouvrir le menu">
-      <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-    </button>
+    <div class="flex items-center gap-1 lg:hidden">
+      {lang_switcher(current)}
+      <button id="menu-toggle" type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-full" aria-controls="mobile-menu" aria-expanded="false" aria-label="Ouvrir le menu">
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
   </div>
   <nav id="mobile-menu" aria-label="Navigation mobile" class="h-[calc(100dvh-4rem)] overflow-y-auto border-t border-ink-line bg-ink px-4 pb-10 pt-2 lg:hidden" hidden>
     {mobile}
-    <a href="{CTA[1]}" class="btn-ochre mt-6 w-full">{CTA[0]}</a>
+    <a href="{cta[1]}" class="btn-ochre mt-6 w-full">{cta[0]}</a>
   </nav>
 </header>"""
 
@@ -360,30 +447,31 @@ def news_band():
     return f"""
 <section aria-labelledby="band-titre" class="border-t border-ink/10 bg-cream-dark">
   <div class="container-x grid gap-6 py-12 md:grid-cols-3">
-    <h2 id="band-titre" class="font-serif text-3xl">Actualités</h2>
+    <h2 id="band-titre" class="font-serif text-3xl">{L("Actualités", "News")}</h2>
     <div>
-      <p class="eyebrow">Commander</p>
-      <p class="mt-2 text-lg font-medium">Bon de commande et catalogue des cuvées</p>
-      <a href="{ORDER_URL}" class="mt-2 inline-block text-wine underline underline-offset-4">Commander nos vins</a>
+      <p class="eyebrow">{L("Commander", "Order")}</p>
+      <p class="mt-2 text-lg font-medium">{L("Bon de commande et catalogue des cuvées", "Order form and catalogue of our wines")}</p>
+      <a href="{U(ORDER_URL)}" class="mt-2 inline-block text-wine underline underline-offset-4">{L("Commander nos vins", "Order our wines")}</a>
     </div>
     <div>
-      <p class="eyebrow">Les rendez-vous</p>
-      <p class="mt-2 text-lg font-medium">Rendez-vous pour les salons habituels…</p>
-      <a href="/actualite/" class="mt-2 inline-block text-wine underline underline-offset-4">Voir l'actualité</a>
+      <p class="eyebrow">{L("Les rendez-vous", "Where to find us")}</p>
+      <p class="mt-2 text-lg font-medium">{L("Rendez-vous pour les salons habituels…", "See you at our usual wine fairs…")}</p>
+      <a href="{U("/actualite/")}" class="mt-2 inline-block text-wine underline underline-offset-4">{L("Voir l'actualité", "See the news")}</a>
     </div>
   </div>
 </section>"""
 
 
 def footer():
-    cols = "".join(f'<li><a class="hover:text-cream" href="{h}">{l}</a></li>' for l, h in NAV)
+    nav, cta = (NAV_EN, CTA_EN) if LANG == "en" else (NAV, CTA)
+    cols = "".join(f'<li><a class="hover:text-cream" href="{h}">{l}</a></li>' for l, h in nav)
     return f"""
 <footer class="bg-ink text-cream/75">
   <div class="container-x grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
     <div class="lg:col-span-2">
       <p class="font-serif text-3xl text-cream [font-variant:small-caps]">Domaine de Sabbat</p>
-      <p class="mt-3 max-w-sm text-sm leading-relaxed">Vins biologiques et vins nature de la Vallée de l'Agly, au pied des Corbières catalanes. Accueil et visite sur rendez-vous.</p>
-      <a href="{CTA[1]}" class="btn-ochre mt-6">Réserver une visite</a>
+      <p class="mt-3 max-w-sm text-sm leading-relaxed">{L("Vins biologiques et vins nature de la Vallée de l'Agly, au pied des Corbières catalanes. Accueil et visite sur rendez-vous.", "Organic and natural wines from the Agly Valley, at the foot of the Catalan Corbières. Visits by appointment.")}</p>
+      <a href="{cta[1]}" class="btn-ochre mt-6">{L("Réserver une visite", "Book a visit")}</a>
     </div>
     <div>
       <h2 class="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-ochre-light">Contact</h2>
@@ -391,26 +479,25 @@ def footer():
         <p class="text-cream">{BIZ['name']}</p>
         <p>{BIZ['owner']}</p>
         <p>{BIZ['street']}<br>{BIZ['zip']} {BIZ['city']}</p>
-        <p class="pt-2">Mobile : <a class="hover:text-cream" href="tel:{BIZ['mobile_tel']}">{BIZ['mobile']}</a></p>
+        <p class="pt-2">{L("Mobile", "Mobile")} : <a class="hover:text-cream" href="tel:{BIZ['mobile_tel']}">{BIZ['mobile']}</a></p>
         <p>Fax : {BIZ['fax']}</p>
         <p><a class="hover:text-cream" href="mailto:{BIZ['email']}">{BIZ['email']}</a></p>
       </address>
     </div>
-    <nav aria-label="Pied de page">
-      <h2 class="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-ochre-light">Le site</h2>
+    <nav aria-label="{L("Pied de page", "Footer")}">
+      <h2 class="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-ochre-light">{L("Le site", "The site")}</h2>
       <ul class="mt-4 space-y-2 text-sm">{cols}
-        <li><a class="hover:text-cream" href="/oenotourisme/">Œnotourisme</a></li>
-        <li><a class="hover:text-cream" href="/oenotourisme/vallee-de-l-agly/">Vallée de l'Agly</a></li>
-        <li><a class="hover:text-cream" href="/en/wine-tasting-roussillon/" hreflang="en" lang="en">Wine tasting (English)</a></li>
-        <li><a class="hover:text-cream" href="/plan-d-acces/">Plan d'accès</a></li>
-        <li><a class="hover:text-cream" href="/mentions-legales/">Mentions légales</a></li>
+        <li><a class="hover:text-cream" href="{U("/oenotourisme/")}">{L("Œnotourisme", "Wine tasting")}</a></li>
+        <li><a class="hover:text-cream" href="{U("/oenotourisme/vallee-de-l-agly/")}">{L("Vallée de l'Agly", "Agly Valley")}</a></li>
+        <li><a class="hover:text-cream" href="{U("/plan-d-acces/")}">{L("Plan d'accès", "Directions")}</a></li>
+        <li><a class="hover:text-cream" href="{U("/mentions-legales/")}">{L("Mentions légales", "Legal notice")}</a></li>
       </ul>
     </nav>
   </div>
   <div class="border-t border-ink-line">
     <div class="container-x flex flex-col gap-2 py-6 text-xs text-cream/50 sm:flex-row sm:justify-between">
       <p>© <span id="year">{date.today().year}</span> {BIZ['name']}</p>
-      <p>L'abus d'alcool est dangereux pour la santé, à consommer avec modération.</p>
+      <p>{L("L'abus d'alcool est dangereux pour la santé, à consommer avec modération.", "Alcohol abuse is dangerous for your health. Please drink responsibly.")}</p>
     </div>
   </div>
 </footer>"""
@@ -425,25 +512,24 @@ def crumbs_html(crumbs):
             items.append(f'<li aria-current="page" class="text-ink/80">{escape(n)}</li>')
         else:
             items.append(f'<li><a class="hover:text-wine" href="{u}">{escape(n)}</a></li><li aria-hidden="true">/</li>')
-    return f'<nav aria-label="Fil d\'Ariane" class="container-x pt-6 text-sm"><ol class="flex flex-wrap gap-2 text-ink/70">{"".join(items)}</ol></nav>'
+    label = L("Fil d'Ariane", "Breadcrumb")
+    return f'<nav aria-label="{label}" class="container-x pt-6 text-sm"><ol class="flex flex-wrap gap-2 text-ink/70">{"".join(items)}</ol></nav>'
 
 
 PAGES = []  # (url, priority, alternates hreflang)
 
 
-EN_LABELS = {
-    ">Aller au contenu<": ">Skip to content<",
-    'aria-label="Ouvrir le menu"': 'aria-label="Open menu"',
-    'aria-label="Fil d\'Ariane"': 'aria-label="Breadcrumb"',
-    ">Réserver sur Viny'aquí<": ">Book on Viny'aquí<",
-    "L'abus d'alcool est dangereux pour la santé, à consommer avec modération.": "Alcohol abuse is dangerous for your health. Please drink responsibly.",
-}
 OG_DEFAULT = "/og-domaine-de-sabbat.jpg"
 
 
 def page(url, title, desc, body, crumbs=None, ld=None, og_image=OG_DEFAULT,
-         og_type="website", priority="0.7", head_extra="", noindex=False, lang="fr", alternates=None):
-    crumbs = crumbs or [("Accueil", "/")]
+         og_type="website", priority="0.7", head_extra="", noindex=False, alternates=None):
+    lang = "en" if url.startswith("/en/") else "fr"
+    assert lang == LANG, f"{url} générée avec LANG={LANG}"
+    if alternates is None and not noindex and counterpart(url):
+        fr_url, en_url = (url, counterpart(url)) if lang == "fr" else (counterpart(url), url)
+        alternates = [("fr", fr_url), ("en", en_url), ("x-default", fr_url)]
+    crumbs = crumbs or [(L("Accueil", "Home"), U("/"))]
     ld = list(ld or [])
     if len(crumbs) > 1:
         ld.append(breadcrumbs_ld(crumbs))
@@ -457,6 +543,9 @@ def page(url, title, desc, body, crumbs=None, ld=None, og_image=OG_DEFAULT,
     alt_links = "".join(f'<link rel="alternate" hreflang="{hl}" href="{SITE}{u}">' for hl, u in (alternates or []))
     og_locale = {"fr": "fr_FR", "en": "en_GB"}[lang]
     robots = "noindex, follow" if noindex else "index, follow, max-image-preview:large"
+    winery = WINERY if lang == "fr" else {**WINERY, "description": WINERY_DESC_EN,
+                                          "makesOffer": {**WINERY["makesOffer"], "name": "Cellar visit and natural wine tasting",
+                                                         "url": f"{SITE}/en/wine-tasting-roussillon/"}}
     html_doc = f"""<!doctype html>
 <html lang="{lang}">
 <head>
@@ -485,7 +574,7 @@ def page(url, title, desc, body, crumbs=None, ld=None, og_image=OG_DEFAULT,
 <link rel="icon" href="/favicon.png" sizes="16x16" type="image/png">
 <link rel="stylesheet" href="/assets/site.css">
 {head_extra}
-{jsonld(WINERY) if url in ('/', '/oenotourisme/', '/en/wine-tasting-roussillon/') else ''}
+{jsonld(winery) if url in ('/', '/oenotourisme/', '/en/', '/en/wine-tasting-roussillon/') else ''}
 {''.join(jsonld(x) for x in ld)}
 </head>
 <body class="flex min-h-screen flex-col">
@@ -501,9 +590,9 @@ def page(url, title, desc, body, crumbs=None, ld=None, og_image=OG_DEFAULT,
 </html>
 """
     if lang == "en":
-        for fr, en in EN_LABELS.items():
-            html_doc = html_doc.replace(fr, en)
-    out = DIST / url.strip("/") / "index.html" if url.endswith("/") else DIST / url
+        html_doc = html_doc.replace(">Aller au contenu<", ">Skip to content<").replace('aria-label="Ouvrir le menu"', 'aria-label="Open menu"')
+        html_doc = html_doc.replace('aria-label="Navigation principale"', 'aria-label="Main navigation"').replace('aria-label="Navigation mobile"', 'aria-label="Mobile navigation"')
+    out = DIST / url.strip("/") / "index.html" if url.endswith("/") else DIST / url.lstrip("/")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html_doc, encoding="utf-8")
     if not noindex:
@@ -520,13 +609,18 @@ def page_hero(eyebrow, h1, intro=None, dark=False):
 </header>"""
 
 
-VINYAQUI_ANCHOR = "Visite de cave et dégustation de vin nature à Latour-de-France, sur Viny'aquí"
+VINYAQUI_ANCHOR_FR = "Visite de cave et dégustation de vin nature à Latour-de-France, sur Viny'aquí"
+VINYAQUI_ANCHOR_EN = "Cellar visit and natural wine tasting in Latour-de-France, on Viny'aquí"
+
+
+def vinyaqui_anchor():
+    return L(VINYAQUI_ANCHOR_FR, VINYAQUI_ANCHOR_EN)
 
 
 def vinyaqui_widget():
     return f"""<!-- Widget de réservation Vinyaqui -->
         <div id="vinyaqui-widget"></div>
-        <a class="vinyaqui-backlink" href="{VINYAQUI_URL}" target="_blank" rel="noopener">{VINYAQUI_ANCHOR}</a>
+        <a class="vinyaqui-backlink" href="{VINYAQUI_URL}" target="_blank" rel="noopener">{vinyaqui_anchor()}</a>
         <link rel="stylesheet" href="https://vinyaqui.com/widget/booking-widget.css?v=1.4">
         <script defer
           src="https://vinyaqui.com/widget/booking-widget.js?v=1.4"
@@ -535,39 +629,40 @@ def vinyaqui_widget():
           data-api-key="vk_brM50cZ7UtUDW5ZNkVIW6wPjn5BJJTbayzlrAZGHJuyLOC9nzJCWDppRKrt9"
           data-target="#vinyaqui-widget"
         ></script>
-        <noscript><p class="mt-4"><a class="btn-wine" href="{VINYAQUI_URL}" target="_blank" rel="noopener">Réserver sur Viny'aquí</a></p></noscript>"""
+        <noscript><p class="mt-4"><a class="btn-wine" href="{VINYAQUI_URL}" target="_blank" rel="noopener">{L("Réserver sur Viny'aquí", "Book on Viny'aquí")}</a></p></noscript>"""
 
 
 def visit_cta(compact=False, widget=False):
-    left_img = img('visite-embouteillage', "Barriques et bouteilles dans le chai du Domaine de Sabbat", 'mb-8 aspect-[16/9] w-full rounded-2xl object-cover') if widget else ""
-    viny_btn = (f'<a href="{VINYAQUI_URL}" target="_blank" rel="noopener" class="btn-ghost-light mt-8">'
-                "Voir l'activité sur Viny'aquí</a>") if widget else ""
+    alt_cave = L("Barriques et bouteilles dans le chai du Domaine de Sabbat", "Barrels and bottles in the cellar of Domaine de Sabbat")
+    left_img = img('visite-embouteillage', alt_cave, 'mb-8 aspect-[16/9] w-full rounded-2xl object-cover') if widget else ""
+    viny_label = L("Voir l'activité sur Viny'aquí", "See the activity on Viny'aquí")
+    viny_btn = f'<a href="{VINYAQUI_URL}" target="_blank" rel="noopener" class="btn-ghost-light mt-8">{viny_label}</a>' if widget else ""
     if widget:
         side = f'''<div class="rounded-3xl bg-white p-5 text-ink shadow-lg sm:p-8">
-      <h3 class="font-serif text-2xl">Réserver en ligne</h3>
-      <p class="mt-2 text-sm text-stone">Choisissez une date et un créneau. Réservation instantanée, paiement sécurisé.</p>
+      <h3 class="font-serif text-2xl">{L("Réserver en ligne", "Book online")}</h3>
+      <p class="mt-2 text-sm text-stone">{L("Choisissez une date et un créneau. Réservation instantanée, paiement sécurisé.", "Pick a date and a time slot. Instant booking, secure payment.")}</p>
       <div class="mt-5">{vinyaqui_widget()}</div>
     </div>'''
     elif compact:
         side = ""
     else:
-        side = img('visite-embouteillage', "Barriques et bouteilles dans le chai du Domaine de Sabbat", 'mx-auto aspect-[16/10] w-full rounded-2xl object-cover md:aspect-[4/5] md:max-w-sm')
+        side = img('visite-embouteillage', alt_cave, 'mx-auto aspect-[16/10] w-full rounded-2xl object-cover md:aspect-[4/5] md:max-w-sm')
     return f"""
 <section aria-labelledby="cta-visite" class="bg-ink text-cream">
   <div class="container-x grid {'items-start' if widget else 'items-center'} gap-10 py-16 md:grid-cols-[1.2fr_1fr] lg:py-20">
     <div>
       {left_img}
-      <p class="eyebrow !text-ochre-light">Œnotourisme</p>
-      <h2 id="cta-visite" class="mt-3 text-4xl sm:text-5xl">Visitez la cave, dégustez nos vins nature</h2>
-      <p class="mt-5 max-w-xl text-lg leading-relaxed text-cream/80">Poussez la porte du chai à Latour-de-France : découverte de la vinification naturelle, dégustation commentée de 4 à 8 vins et échange direct avec le vigneron.</p>
+      <p class="eyebrow !text-ochre-light">{L("Œnotourisme", "Wine tourism")}</p>
+      <h2 id="cta-visite" class="mt-3 text-4xl sm:text-5xl">{L("Visitez la cave, dégustez nos vins nature", "Visit the cellar, taste our natural wines")}</h2>
+      <p class="mt-5 max-w-xl text-lg leading-relaxed text-cream/80">{L("Poussez la porte du chai à Latour-de-France : découverte de la vinification naturelle, dégustation commentée de 4 à 8 vins et échange direct avec le vigneron.", "Step into the cellar in Latour-de-France: discover natural winemaking, taste 4 to 8 wines with commentary and talk directly with the winemaker.")}</p>
       <ul class="mt-6 flex flex-wrap gap-3 text-sm">
         <li class="rounded-full border border-cream/25 px-4 py-1.5">1 h 30</li>
-        <li class="rounded-full border border-cream/25 px-4 py-1.5">3 € / pers.</li>
+        <li class="rounded-full border border-cream/25 px-4 py-1.5">{L("3 € / pers.", "€3 / person")}</li>
         <li class="rounded-full border border-cream/25 px-4 py-1.5">FR · EN · ES</li>
-        <li class="rounded-full border border-cream/25 px-4 py-1.5">1 à 20 personnes</li>
+        <li class="rounded-full border border-cream/25 px-4 py-1.5">{L("1 à 20 personnes", "1 to 20 people")}</li>
       </ul>
       <div class="flex flex-wrap gap-3">
-        <a href="/oenotourisme/" class="btn-ochre mt-8">{"Tout savoir sur la visite" if widget else "Réserver ma visite"}</a>
+        <a href="{U("/oenotourisme/")}" class="btn-ochre mt-8">{L("Tout savoir sur la visite", "Everything about the visit") if widget else L("Réserver ma visite", "Book my visit")}</a>
         {viny_btn}
       </div>
     </div>
@@ -579,9 +674,9 @@ def visit_cta(compact=False, widget=False):
 def wine_card(w, heading="h3"):
     return f"""
 <li>
-  <a href="/les-vins/{w['slug']}/" class="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-ink/5 transition hover:-translate-y-0.5 hover:shadow-md">
+  <a href="{U('/les-vins/' + w['slug'] + '/')}" class="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-ink/5 transition hover:-translate-y-0.5 hover:shadow-md">
     <div class="flex aspect-[3/2] items-center justify-center bg-cream-dark/60 p-5">
-      {img(w['img'], f"Étiquette {w['name']} — {w['appellation']}", 'h-auto max-h-full w-auto max-w-full rounded shadow-sm')}
+      {img(w['img'], f"{L('Étiquette', 'Label')} {w['name']} — {w['appellation']}", 'h-auto max-h-full w-auto max-w-full rounded shadow-sm')}
     </div>
     <div class="flex flex-1 flex-col p-5">
       <p class="text-xs font-semibold uppercase tracking-wider text-wine">{w['color']}</p>
@@ -931,7 +1026,7 @@ def build_agly_guide():
     <h2 class="mt-2 font-serif text-3xl">Visite de cave à Latour-de-France</h2>
     <p class="mt-3 text-cream/80">Visite du chai, vinification naturelle et dégustation commentée de 4 à 8 vins avec le vigneron. 3 € par personne.</p>
     <a href="/oenotourisme/" class="btn-ochre mt-6">Réserver ma dégustation</a>
-    <p class="mt-4 text-sm"><a class="underline" href="{VINYAQUI_URL}" target="_blank" rel="noopener">{VINYAQUI_ANCHOR}</a></p>
+    <p class="mt-4 text-sm"><a class="underline" href="{VINYAQUI_URL}" target="_blank" rel="noopener">{vinyaqui_anchor()}</a></p>
     <p class="mt-4 text-sm text-cream/70"><a class="underline" href="/plan-d-acces/">Plan d'accès à la cave</a></p>
   </aside>
 </div>"""
@@ -939,81 +1034,6 @@ def build_agly_guide():
          "Guide de la Vallée de l'Agly autour de Latour-de-France : Maury, Tautavel, Vingrau, châteaux cathares et dégustation de vin nature chez le vigneron.",
          body, crumbs=[("Accueil", "/"), ("Œnotourisme", "/oenotourisme/"), ("Vallée de l'Agly", "/oenotourisme/vallee-de-l-agly/")],
          priority="0.8")
-
-
-def build_en_tasting():
-    faq = [
-        ("How long is the cellar visit and wine tasting?", "About 1 hour 30. You taste between 4 and 8 natural and organic wines with the winemaker."),
-        ("How much does it cost?", "€3 per person, shown in the booking module."),
-        ("Which languages are available?", "The visit is offered in French, English and Spanish, for 1 to 20 people per slot."),
-        ("Where is the winery?", "24 boulevard Carnot, 66720 Latour-de-France, in the Agly Valley, about 20 km north-west of Perpignan (Pyrénées-Orientales, Roussillon, South of France)."),
-        ("Can I cancel my booking?", "Yes, cancellation is possible up to 1 day before the visit."),
-    ]
-    faq_ld = {"@context": "https://schema.org", "@type": "FAQPage",
-              "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]}
-    faq_html = "".join(f"""
-<details class="group rounded-2xl bg-white p-5 ring-1 ring-ink/5 open:shadow-sm">
-  <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-medium">{escape(q)}<span class="text-wine transition group-open:rotate-45" aria-hidden="true">+</span></summary>
-  <p class="mt-3 leading-relaxed text-ink/75">{escape(a)}</p>
-</details>""" for q, a in faq)
-    body = f"""
-<section class="bg-ink text-cream">
-  <div class="container-x grid items-center gap-10 py-12 md:grid-cols-[1.25fr_1fr] lg:py-16">
-    <div>
-      <p class="eyebrow !text-ochre-light">Wine tourism · Latour-de-France</p>
-      <h1 class="mt-4 text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">Cellar visit &amp; natural wine tasting</h1>
-      <p class="mt-6 max-w-xl text-lg leading-relaxed text-cream/80">At the foot of the Catalan Corbières, Domaine de Sabbat opens its doors for a sensory immersion in the heart of the Catalan terroir: the cellar, natural winemaking, and the wines, with the person who makes them.</p>
-      <ul class="mt-6 grid max-w-md grid-cols-2 gap-3 text-sm">
-        <li class="rounded-xl border border-cream/20 p-3"><span class="block text-cream/60">Duration</span>1 h 30</li>
-        <li class="rounded-xl border border-cream/20 p-3"><span class="block text-cream/60">Price</span>€3 / person</li>
-        <li class="rounded-xl border border-cream/20 p-3"><span class="block text-cream/60">Group</span>1 to 20 people</li>
-        <li class="rounded-xl border border-cream/20 p-3"><span class="block text-cream/60">Languages</span>FR · EN · ES</li>
-      </ul>
-      <a href="#book" class="btn-ochre mt-8">Check availability</a>
-      <p class="mt-4 text-sm text-cream/70"><a class="underline underline-offset-4 hover:text-cream" href="/oenotourisme/" hreflang="fr" lang="fr">Version française</a></p>
-    </div>
-    {img('visite-embouteillage', "Oak barrels and freshly bottled wine in the cellar of Domaine de Sabbat", 'mx-auto aspect-[16/10] w-full rounded-2xl object-cover md:aspect-[4/5] md:max-w-sm', eager=True)}
-  </div>
-</section>
-{crumbs_html([("Home", "/"), ("Wine tasting", "/en/wine-tasting-roussillon/")])}
-<div class="container-x grid gap-12 py-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:py-16">
-  <div class="prose-sabbat">
-    <h2 class="font-serif text-4xl text-ink">An authentic visit at the winemaker's</h2>
-    <p class="mt-5">Domaine de Sabbat is a family winery of 11 hectares founded in 2008 by <strong>Sylvain Lejeune</strong>. The vines grow on schist, marl and clay-limestone soils around Maury, Tautavel and Vingrau, at the foot of the Corbières hills. During the visit you discover the cellar and the principles of natural winemaking: no chemical inputs, respect for the grape, the soil and living things.</p>
-    <p>The tasting covers a selection of Côtes du Roussillon, Côtes du Roussillon Villages, I.G.P. Côtes Catalanes, natural wines and Rivesaltes, depending on the day.</p>
-    <h3 class="mt-10 font-serif text-2xl text-ink">Included in the visit</h3>
-    <ul class="mt-4 space-y-3">
-      <li class="flex gap-3"><span class="mt-1 text-wine" aria-hidden="true">✦</span><span>Discovery of the cellar and the winemaking steps</span></li>
-      <li class="flex gap-3"><span class="mt-1 text-wine" aria-hidden="true">✦</span><span>Guided tasting of 4 to 8 wines from the estate</span></li>
-      <li class="flex gap-3"><span class="mt-1 text-wine" aria-hidden="true">✦</span><span>Direct exchange with the winemaker</span></li>
-      <li class="flex gap-3"><span class="mt-1 text-wine" aria-hidden="true">✦</span><span>Wine available to buy on site</span></li>
-    </ul>
-    <p class="mt-6 text-sm text-stone">Address: 24 boulevard Carnot, 66720 Latour-de-France — <a href="/plan-d-acces/">directions (in French)</a>. Also available as a gift card.</p>
-  </div>
-  <section id="book" class="scroll-mt-28 lg:sticky lg:top-28 lg:self-start">
-    <div class="rounded-3xl bg-white p-5 shadow-lg ring-1 ring-ink/5 sm:p-8">
-      <h2 class="font-serif text-3xl">Book your tasting</h2>
-      <p class="mt-2 text-sm text-stone">Pick a date and a time slot. Instant booking, secure payment.</p>
-      <div class="mt-6">{vinyaqui_widget().replace(VINYAQUI_ANCHOR, "Cellar visit and natural wine tasting in Latour-de-France, on Viny'aquí")}</div>
-    </div>
-  </section>
-</div>
-<section aria-labelledby="faq" class="container-x pb-16">
-  <h2 id="faq" class="font-serif text-4xl">Frequently asked questions</h2>
-  <div class="mt-8 grid gap-4 lg:grid-cols-2">{faq_html}</div>
-</section>
-"""
-    page("/en/wine-tasting-roussillon/", "Natural wine tasting & cellar visit near Perpignan",
-         "Natural wine tasting at a winemaker's cellar in Latour-de-France, near Perpignan: 4 to 8 organic wines, 1 h 30, €3 per person. Book online, English spoken.",
-         body, crumbs=[("Home", "/"), ("Wine tasting", "/en/wine-tasting-roussillon/")], ld=[faq_ld], priority="0.8",
-         lang="en",
-         alternates=[("fr", "/oenotourisme/"), ("en", "/en/wine-tasting-roussillon/"), ("x-default", "/oenotourisme/")],
-         head_extra='<link rel="preconnect" href="https://vinyaqui.com">')
-    # Même gabarit que la page FR : fil d'Ariane sous le hero uniquement.
-    out = DIST / "en" / "wine-tasting-roussillon" / "index.html"
-    html_doc = out.read_text(encoding="utf-8")
-    first = crumbs_html([("Home", "/"), ("Wine tasting", "/en/wine-tasting-roussillon/")]).replace("Fil d\'Ariane", "Breadcrumb")
-    out.write_text(html_doc.replace(first, "", 1), encoding="utf-8")
 
 
 def build_news():
@@ -1048,21 +1068,22 @@ def build_news():
 def map_block():
     bbox = f"{BIZ['lng'] - 0.012},{BIZ['lat'] - 0.007},{BIZ['lng'] + 0.012},{BIZ['lat'] + 0.007}"
     return f"""<div class="overflow-hidden rounded-3xl ring-1 ring-ink/10">
-  <iframe title="Carte : Domaine de Sabbat, 24 boulevard Carnot, Latour-de-France" class="block h-[360px] w-full sm:h-[460px]" loading="lazy"
+  <iframe title="{L('Carte', 'Map')} : Domaine de Sabbat, 24 boulevard Carnot, Latour-de-France" class="block h-[360px] w-full sm:h-[460px]" loading="lazy"
     src="https://www.openstreetmap.org/export/embed.html?bbox={bbox}&amp;layer=mapnik&amp;marker={BIZ['lat']},{BIZ['lng']}"></iframe>
 </div>"""
 
 
 def address_card(with_button=True):
-    button = (f'<a class="btn-wine mt-6" href="{VINYAQUI_URL}" target="_blank" rel="noopener">Réserver une visite sur Viny\'aquí</a>') if with_button else ""
+    button_label = L("Réserver une visite sur Viny'aquí", "Book a visit on Viny'aquí")
+    button = f'<a class="btn-wine mt-6" href="{VINYAQUI_URL}" target="_blank" rel="noopener">{button_label}</a>' if with_button else ""
     return f"""<div class="rounded-3xl bg-white p-6 ring-1 ring-ink/5 sm:p-8">
   <h2 class="font-serif text-3xl">{BIZ['name']}</h2>
   <address class="mt-4 space-y-1 not-italic leading-relaxed">
     <p>{BIZ['street']}<br>{BIZ['zip']} {BIZ['city']}, France</p>
-    <p class="pt-3">Téléphone : <a class="text-wine underline" href="tel:{BIZ['phone_tel']}">{BIZ['phone']}</a></p>
+    <p class="pt-3">{L("Téléphone", "Phone")} : <a class="text-wine underline" href="tel:{BIZ['phone_tel']}">{BIZ['phone']}</a></p>
     <p>Mobile : <a class="text-wine underline" href="tel:{BIZ['mobile_tel']}">{BIZ['mobile']}</a></p>
     <p>Fax : {BIZ['fax']}</p>
-    <p>E-mail : <a class="text-wine underline" href="mailto:{BIZ['email']}">{BIZ['email']}</a></p>
+    <p>{L("E-mail", "Email")} : <a class="text-wine underline" href="mailto:{BIZ['email']}">{BIZ['email']}</a></p>
   </address>
   {button}
 </div>"""
@@ -1116,7 +1137,7 @@ def build_access():
       <a class="btn-wine" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&amp;destination={BIZ['lat']},{BIZ['lng']}">Itinéraire Google Maps ↗</a>
       <a class="btn-ghost" href="/oenotourisme/">Réserver une visite</a>
     </div>
-    <p class="text-sm text-stone">Venez déguster nos vins à la cave : <a class="text-wine underline" href="{VINYAQUI_URL}" target="_blank" rel="noopener">{VINYAQUI_ANCHOR}</a>.</p>
+    <p class="text-sm text-stone">Venez déguster nos vins à la cave : <a class="text-wine underline" href="{VINYAQUI_URL}" target="_blank" rel="noopener">{vinyaqui_anchor()}</a>.</p>
   </div>
 </div>"""
     page("/plan-d-acces/", "Plan d'accès — Latour-de-France (66)",
@@ -1200,7 +1221,8 @@ def build_meta_files():
     for w in WINES:
         if w["old"] != w["slug"]:
             redirects[f"/les-vins/{w['old']}/"] = f"/les-vins/{w['slug']}/"
-    lines = ["# Généré par build.py", "Options -MultiViews", "ErrorDocument 404 /404.html", "",
+    lines = ["# Généré par build.py", "Options -MultiViews", "ErrorDocument 404 /404.html",
+             '<If "%{REQUEST_URI} =~ m#^/en/#">', "  ErrorDocument 404 /en/404.html", "</If>", "",
              "RewriteEngine On",
              "RewriteCond %{HTTPS} off [OR]", "RewriteCond %{HTTP_HOST} !^www\\. [NC]",
              "RewriteRule ^ https://www.domainedesabbat.fr%{REQUEST_URI} [L,R=301]", ""]
@@ -1224,6 +1246,7 @@ def build_meta_files():
 - [Visite de cave et dégustation]({SITE}/oenotourisme/): 1 h 30, 4 à 8 vins, 3 € par personne, réservation en ligne
 - [Guide de la Vallée de l'Agly]({SITE}/oenotourisme/vallee-de-l-agly/): que faire autour de Latour-de-France
 - [Wine tasting & cellar visit (EN)]({SITE}/en/wine-tasting-roussillon/): natural wine tasting near Perpignan, €3 per person
+- [English version of the site]({SITE}/en/): every page is available in English under /en/
 - [Les vins]({SITE}/les-vins/): 11 cuvées
 {wine_links}- [Les acteurs]({SITE}/les-acteurs/): le vigneron et les partenaires du domaine
 - [Présentation]({SITE}/presentation/)
@@ -1247,12 +1270,25 @@ def copy_assets():
             shutil.copy2(p, DIST / p.name)
 
 
-if __name__ == "__main__":
+def main():
+    global LANG
     for p in DIST.glob("*"):
         if p.name != "assets":
             shutil.rmtree(p) if p.is_dir() else p.unlink()
     copy_assets()
+    LANG = "fr"
     build_home(); build_presentation(); build_technique(); build_wines(); build_actors()
-    build_oenotourisme(); build_agly_guide(); build_en_tasting(); build_news(); build_order(); build_access(); build_contact(); build_legal(); build_404()
+    build_oenotourisme(); build_agly_guide(); build_news(); build_order(); build_access(); build_contact(); build_legal(); build_404()
+    LANG = "en"
+    import en_site_a, en_site_b  # pages anglaises (mêmes gabarits, textes traduits)
+    en_site_a.build_all()
+    en_site_b.build_all()
+    LANG = "fr"
     build_meta_files()
     print(f"{len(PAGES)} pages indexables générées dans dist/")
+
+
+if __name__ == "__main__":
+    # Les modules en_site_* font « import build » : on passe par ce module pour partager LANG et PAGES.
+    import build
+    build.main()

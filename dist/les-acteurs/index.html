@@ -8,11 +8,11 @@
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://www.domainedesabbat.fr/les-acteurs/">
 <meta property="og:url" content="https://www.domainedesabbat.fr/les-acteurs/">
-
+<link rel="alternate" hreflang="fr" href="https://www.domainedesabbat.fr/les-acteurs/"><link rel="alternate" hreflang="en" href="https://www.domainedesabbat.fr/en/the-team/"><link rel="alternate" hreflang="x-default" href="https://www.domainedesabbat.fr/les-acteurs/">
 <meta name="theme-color" content="#15120f">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="fr_FR">
-
+<meta property="og:locale:alternate" content="en_GB">
 <meta property="og:site_name" content="Domaine de Sabbat">
 <meta property="og:title" content="Les acteurs — Sylvain Lejeune, vigneron | Domaine de Sabbat">
 <meta property="og:description" content="Rencontrez Sylvain Lejeune, fondateur du Domaine de Sabbat en 2008, les associés Terra Hominis et Pilou, le surveillant du vignoble.">
@@ -39,10 +39,14 @@
     <a href="/" class="font-serif text-2xl font-semibold leading-none tracking-wide [font-variant:small-caps] lg:text-[1.7rem]" aria-label="Domaine de Sabbat — accueil">Domaine de Sabbat</a>
     <nav aria-label="Navigation principale" class="hidden items-center gap-0.5 lg:flex xl:gap-1"><a href="/presentation/" class="nav-link">Le domaine</a><a href="/technique/" class="nav-link">Technique</a><a href="/les-vins/" class="nav-link">Les vins</a><a href="/les-acteurs/" class="nav-link" aria-current="page">Les acteurs</a><a href="/actualite/" class="nav-link">Actualité</a><a href="/commander/" class="nav-link">Commander</a><a href="/contact/" class="nav-link">Contact</a>
       <a href="/oenotourisme/" class="ml-2 whitespace-nowrap rounded-full border border-cream/30 px-3.5 py-1.5 text-sm text-cream/80 transition-colors hover:border-cream hover:text-cream">Visites & dégustations</a>
+      <div class="flex items-center gap-2 text-xs tracking-wider ml-3"><span class="font-semibold text-cream" aria-current="true">FR</span><span class="text-cream/30" aria-hidden="true">|</span><a href="/en/the-team/" hreflang="en" lang="en" class="text-cream/60 hover:text-cream" aria-label="View this page in English">EN</a></div>
     </nav>
-    <button id="menu-toggle" type="button" class="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-full lg:hidden" aria-controls="mobile-menu" aria-expanded="false" aria-label="Ouvrir le menu">
-      <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-    </button>
+    <div class="flex items-center gap-1 lg:hidden">
+      <div class="flex items-center gap-2 text-xs tracking-wider "><span class="font-semibold text-cream" aria-current="true">FR</span><span class="text-cream/30" aria-hidden="true">|</span><a href="/en/the-team/" hreflang="en" lang="en" class="text-cream/60 hover:text-cream" aria-label="View this page in English">EN</a></div>
+      <button id="menu-toggle" type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-full" aria-controls="mobile-menu" aria-expanded="false" aria-label="Ouvrir le menu">
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
   </div>
   <nav id="mobile-menu" aria-label="Navigation mobile" class="h-[calc(100dvh-4rem)] overflow-y-auto border-t border-ink-line bg-ink px-4 pb-10 pt-2 lg:hidden" hidden>
     <a href="/presentation/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">Le domaine</a><a href="/technique/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">Technique</a><a href="/les-vins/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">Les vins</a><a href="/les-acteurs/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line" aria-current="page">Les acteurs</a><a href="/actualite/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">Actualité</a><a href="/commander/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">Commander</a><a href="/contact/" class="nav-link block !rounded-none px-0 py-3 text-lg border-b border-ink-line">Contact</a>
@@ -121,7 +125,6 @@
       <ul class="mt-4 space-y-2 text-sm"><li><a class="hover:text-cream" href="/presentation/">Le domaine</a></li><li><a class="hover:text-cream" href="/technique/">Technique</a></li><li><a class="hover:text-cream" href="/les-vins/">Les vins</a></li><li><a class="hover:text-cream" href="/les-acteurs/">Les acteurs</a></li><li><a class="hover:text-cream" href="/actualite/">Actualité</a></li><li><a class="hover:text-cream" href="/commander/">Commander</a></li><li><a class="hover:text-cream" href="/contact/">Contact</a></li>
         <li><a class="hover:text-cream" href="/oenotourisme/">Œnotourisme</a></li>
         <li><a class="hover:text-cream" href="/oenotourisme/vallee-de-l-agly/">Vallée de l'Agly</a></li>
-        <li><a class="hover:text-cream" href="/en/wine-tasting-roussillon/" hreflang="en" lang="en">Wine tasting (English)</a></li>
         <li><a class="hover:text-cream" href="/plan-d-acces/">Plan d'accès</a></li>
         <li><a class="hover:text-cream" href="/mentions-legales/">Mentions légales</a></li>
       </ul>

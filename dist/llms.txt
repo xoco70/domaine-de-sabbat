@@ -6,6 +6,7 @@
 - [Visite de cave et dégustation](https://www.domainedesabbat.fr/oenotourisme/): 1 h 30, 4 à 8 vins, 3 € par personne, réservation en ligne
 - [Guide de la Vallée de l'Agly](https://www.domainedesabbat.fr/oenotourisme/vallee-de-l-agly/): que faire autour de Latour-de-France
 - [Wine tasting & cellar visit (EN)](https://www.domainedesabbat.fr/en/wine-tasting-roussillon/): natural wine tasting near Perpignan, €3 per person
+- [English version of the site](https://www.domainedesabbat.fr/en/): every page is available in English under /en/
 - [Les vins](https://www.domainedesabbat.fr/les-vins/): 11 cuvées
   - [Domaine de Sabbat Rosé](https://www.domainedesabbat.fr/les-vins/domaine-de-sabbat-rose/): I.G.P. Côtes Catalanes
   - [Domaine de Sabbat Blanc](https://www.domainedesabbat.fr/les-vins/domaine-de-sabbat-blanc/): A.O.P. Côtes du Roussillon

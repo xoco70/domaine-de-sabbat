@@ -37,12 +37,13 @@
       e.preventDefault();
       if (!form.reportValidity()) return;
       var d = new FormData(form);
-      var subject = 'Message du site — ' + d.get('nom');
+      var t = (form.dataset.labels || 'Message du site|Nom|Adresse|E-mail|Téléphone').split('|');
+      var subject = t[0] + ' — ' + d.get('nom');
       var body = [
-        'Nom : ' + d.get('nom'),
-        'Adresse : ' + (d.get('adresse') || '—'),
-        'E-mail : ' + d.get('email'),
-        'Téléphone : ' + d.get('telephone'),
+        t[1] + ' : ' + d.get('nom'),
+        t[2] + ' : ' + (d.get('adresse') || '—'),
+        t[3] + ' : ' + d.get('email'),
+        t[4] + ' : ' + d.get('telephone'),
         '',
         d.get('message'),
       ].join('\n');

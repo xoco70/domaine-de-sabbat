@@ -1,6 +1,9 @@
 # Généré par build.py
 Options -MultiViews
 ErrorDocument 404 /404.html
+<If "%{REQUEST_URI} =~ m#^/en/#">
+  ErrorDocument 404 /en/404.html
+</If>
 
 RewriteEngine On
 RewriteCond %{HTTPS} off [OR]
