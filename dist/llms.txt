@@ -7,6 +7,8 @@
 - [Guide de la Vallée de l'Agly](https://www.domainedesabbat.fr/oenotourisme/vallee-de-l-agly/): que faire autour de Latour-de-France
 - [Wine tasting & cellar visit (EN)](https://www.domainedesabbat.fr/en/wine-tasting-roussillon/): natural wine tasting near Perpignan, €3 per person
 - [English version of the site](https://www.domainedesabbat.fr/en/): every page is available in English under /en/
+- [Cata de vino y visita de bodega (ES)](https://www.domainedesabbat.fr/es/cata-de-vino-rosellon/): cata de vino natural cerca de Perpiñán, 3 € por persona
+- [Versión en español del sitio](https://www.domainedesabbat.fr/es/): todas las páginas están disponibles en español bajo /es/
 - [Les vins](https://www.domainedesabbat.fr/les-vins/): 11 cuvées
   - [Domaine de Sabbat Rosé](https://www.domainedesabbat.fr/les-vins/domaine-de-sabbat-rose/): I.G.P. Côtes Catalanes
   - [Domaine de Sabbat Blanc](https://www.domainedesabbat.fr/les-vins/domaine-de-sabbat-blanc/): A.O.P. Côtes du Roussillon

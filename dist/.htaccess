@@ -4,6 +4,9 @@ ErrorDocument 404 /404.html
 <If "%{REQUEST_URI} =~ m#^/en/#">
   ErrorDocument 404 /en/404.html
 </If>
+<If "%{REQUEST_URI} =~ m#^/es/#">
+  ErrorDocument 404 /es/404.html
+</If>
 
 RewriteEngine On
 RewriteCond %{HTTPS} off [OR]
