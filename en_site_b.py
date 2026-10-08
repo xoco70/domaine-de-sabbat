@@ -1,4 +1,4 @@
-"""Pages anglaises (partie B) : wine tasting, Agly Valley, news, order, directions, contact, legal, 404."""
+"""Pages anglaises (partie B) : wine tasting, Agly Valley, order, directions, contact, legal, 404."""
 from html import escape
 
 import build as B
@@ -67,7 +67,6 @@ def build_oenotourisme():
         <li class="rounded-xl border border-cream/20 p-3"><span class="block text-cream/60">Languages</span>FR · EN · ES</li>
       </ul>
       <a href="#reserver" class="btn-ochre mt-8">See availability</a>
-      <p class="mt-4 text-sm text-cream/70"><a class="underline underline-offset-4 hover:text-cream" href="/oenotourisme/" hreflang="fr" lang="fr">Version française</a></p>
     </div>
     {B.img('visite-embouteillage', hero_alt, 'mx-auto aspect-[16/10] w-full rounded-2xl object-cover md:aspect-[4/5] md:max-w-sm', eager=True)}
   </div>
@@ -159,36 +158,6 @@ def build_agly_guide():
            "Guide to the Agly Valley around Latour-de-France: Maury, Tautavel, Vingrau, Cathar castles and a natural wine tasting with the winemaker.",
            body, crumbs=[("Home", EN_HOME), ("Wine tourism", EN_TASTING), ("Agly Valley", "/en/agly-valley/")],
            priority="0.8")
-
-
-def build_news():
-    order = "/en/order/"
-    body = B.page_hero("News", "What's on at the estate")
-    body += f"""<div class="container-x grid gap-6 pb-16 md:grid-cols-2">
-  <article class="rounded-3xl bg-white p-6 ring-1 ring-ink/5 sm:p-8">
-    <p class="eyebrow">End of 2020</p>
-    <h2 class="mt-2 font-serif text-3xl">End-of-year events</h2>
-    <h3 class="mt-6 text-sm font-semibold uppercase tracking-wider text-stone">Wine fairs</h3>
-    <p class="mt-2 leading-relaxed">Feel free to <a class="text-wine underline" href="/en/contact/">request your invitations here</a>! (subject to availability)</p>
-    <h3 class="mt-6 text-sm font-semibold uppercase tracking-wider text-stone">New releases</h3>
-    <ul class="mt-2 space-y-1 leading-relaxed">
-      <li>— <a class="hover:text-wine" href="/en/wines/domaine-de-sabbat-blanc/">Domaine de Sabbat Blanc 2020</a>: available now!</li>
-      <li>— Lladoner Pelut 2021: available now!</li>
-      <li>— <a class="hover:text-wine" href="/en/wines/cuvee-printemps-1900/">Cuvée Printemps 1900' 2018</a></li>
-      <li>— <a class="hover:text-wine" href="/en/wines/naughty-by-nature/">Naughty by Nature 2018</a></li>
-    </ul>
-    <a href="{order}" class="btn-wine mt-8">Order</a>
-  </article>
-  <article class="rounded-3xl bg-ink p-6 text-cream sm:p-8">
-    <p class="eyebrow !text-ochre-light">Order</p>
-    <h2 class="mt-2 font-serif text-3xl">Order directly from the estate</h2>
-    <p class="mt-4 text-cream/75">Download the order form, fill it in and email it back to us: we prepare your order and confirm the delivery arrangements.</p>
-    <a href="{order}" class="btn-ochre mt-8">Order form</a>
-  </article>
-</div>"""
-    B.page("/en/news/", "News: Wine Fairs, New Releases and Vintages",
-           "Wine fairs, new vintages and offers from Domaine de Sabbat, organic and natural winemaker in Latour-de-France.",
-           body, crumbs=[("Home", EN_HOME), ("News", "/en/news/")], priority="0.5")
 
 
 def build_order():
@@ -304,7 +273,6 @@ def build_404():
 def build_all():
     build_oenotourisme()
     build_agly_guide()
-    build_news()
     build_order()
     build_access()
     build_contact()

@@ -1,210 +1,202 @@
 {
  "/": {
   "date": "2026-10-08",
-  "hash": "da7d32222fef5c18c6885081f55dd1bf2d42b61122e577c3832642e5e34cbc15"
- },
- "/actualite/": {
-  "date": "2026-10-08",
-  "hash": "6fa019b373984b67c9575e3c91e4841caa56ac3032d28b25af911a738d21df8b"
+  "hash": "0227a974f4795418621c4931155c1684912b633816dd698e9f2f7882835f97fa"
  },
  "/commander/": {
   "date": "2026-10-08",
-  "hash": "b2b52faf6a609fc12e95def2e024f9cbf2ebaeae6a831b46989eec91fb4c5abd"
+  "hash": "b44524a126bd3ca51ffe01e02ee7bb427c719756687205d86148b04c0d30d03b"
  },
  "/contact/": {
   "date": "2026-10-08",
-  "hash": "862979a2d6d928ce3ec552401c25b7359fdfde2d298608f247997ef1bcccfb1d"
+  "hash": "48bbfe217f1c663daf581e8d8af223f432245a76d87be074bd2cbbd35f9c7265"
  },
  "/en/": {
   "date": "2026-10-08",
-  "hash": "f6162e126f47209b538e18a1885a2ef3f030357e1ca3812d4a0d4bcf32296557"
+  "hash": "73eb7090d8e4de595d49df0e9436340284d3d8977a0b3c750db1d956c44a9cba"
  },
  "/en/about/": {
   "date": "2026-10-08",
-  "hash": "01c0751fa1f42bce5a70c3c2020a54747af0841042ecf6b7e838f22f63c0ae35"
+  "hash": "ac4c4362b2841651d2581c8c840956e62ed8f723d8f271f4aabc1f72f0092f21"
  },
  "/en/agly-valley/": {
   "date": "2026-10-08",
-  "hash": "93cb3226883f868b22a9a73384d6631927244dcaa0bdc02beac3529dceb3bacd"
+  "hash": "387b1f20cffe64f43c546b6725bf0ce693555ef08348a8dfdd4cfc31a03b3052"
  },
  "/en/contact/": {
   "date": "2026-10-08",
-  "hash": "e26621f644f7cba58073b5f5540b3782b64fe4569a40cb457cdc1cbfd8bb6e97"
+  "hash": "81eab92b5903bf9674cc1fce326d4ff281e2e8466362e1e796cb52e0019d482a"
  },
  "/en/directions/": {
   "date": "2026-10-08",
-  "hash": "9e93767da8513ed06ad5b903f18c31289c89a401f2f6d1d4636ba11acb8504ae"
+  "hash": "a8fd52490da7b15fce97834c2c71c68337c31e117a2998aeff94650855b856b7"
  },
  "/en/legal-notice/": {
   "date": "2026-10-08",
-  "hash": "e68f12ccea420d1ea967f91dc6f5543d965f8a1a9d6107cfbcfd643e2b5f3171"
- },
- "/en/news/": {
-  "date": "2026-10-08",
-  "hash": "b3584e3cb308a2d4f93963d79559b5eb0788e9e899cdcab1817acc38e0cdcd72"
+  "hash": "d3241dcd031594987cfd143f7b778bcb227e7a77e76cc840ac0fa488a01e74ab"
  },
  "/en/order/": {
   "date": "2026-10-08",
-  "hash": "060b89c27de34199d6bcd7a1e160709d71c5ee7a3a72d1ae92e0f96a9edfd396"
+  "hash": "f39fffbddce6fe232e909c491ee0d57b6ee96046703ef5dd01e42a4834e52500"
  },
  "/en/the-team/": {
   "date": "2026-10-08",
-  "hash": "ff5d61194ed663244b5514262187c57971263bd06738da96e6b71e62c5b81337"
+  "hash": "58040159f18f2d72710e78239d373019521c6eca921e11b8169dc690af467300"
  },
  "/en/wine-tasting-roussillon/": {
   "date": "2026-10-08",
-  "hash": "7263cd405314c58467aa20c619278f87be164582b0773d2529946d083ff26370"
+  "hash": "90424a3d83d420272793e830f8629f7cd7fdead48edcafe31c2eccae547f6983"
  },
  "/en/winemaking/": {
   "date": "2026-10-08",
-  "hash": "5c24674f62f50f7ec451051ad1594afc3911817b38634db2b964958830adb2cd"
+  "hash": "da03c86f09831b3e43e9933ad82297e89a08360025366ec4b5a6b33235174e9a"
  },
  "/en/winemaking/cellar/": {
   "date": "2026-10-08",
-  "hash": "01b5611c2528e2ccc7a5bbbe9738a743f0e4d7cc1041c26e25b9784fb02eaa26"
+  "hash": "0e5821cebbede9ae548cb9a32aa9a04340b9e8288f450e37e10475fd5ec38b02"
  },
  "/en/winemaking/terroir/": {
   "date": "2026-10-08",
-  "hash": "c7889fe349fab41f903f80b4c75dcad00fcd8153374a002af10e0607b206b95b"
+  "hash": "d29cc4af91721e1b36bdbf4d23053502a569cf5c37a3418f9338db83f3ae2c0e"
  },
  "/en/winemaking/vineyard/": {
   "date": "2026-10-08",
-  "hash": "c6975fecd0f19853c00937b43f2533a96655c28e6c00a2561ef0608f6f60136f"
+  "hash": "578c5415a37de65e4e47d48e1e4debb14cc33fdbd8ee3a1f22863a0f69fe2d03"
  },
  "/en/wines/": {
   "date": "2026-10-08",
-  "hash": "d71902322468d2044d5e8703859f53525a2f1012e5bedf5687a269a7e144f7a0"
+  "hash": "f264d801b343da7113ca01cae892fef0c791b98f99a47e59bd52094a4906bc55"
  },
  "/en/wines/100-grenache/": {
   "date": "2026-10-08",
-  "hash": "453e2640be4aa84537c0fb8c71a521bf8be2b575d9c31c221d07ef715dff7ffd"
+  "hash": "f58f2bf7d76f05500d9186e38943d3a512a842185f1fafe29fcd98fa257e9f75"
  },
  "/en/wines/cuvee-printemps-1900/": {
   "date": "2026-10-08",
-  "hash": "237df929db02eafec9628f33dbd11ad85eb5f879ca38253108ba2ca48e109bd7"
+  "hash": "ccdf1b03316ecfc7cb69522cdfdecf069808b701243fd963988ed034db2bc96f"
  },
  "/en/wines/domaine-de-sabbat-blanc/": {
   "date": "2026-10-08",
-  "hash": "c6ad65e6d37cd040fd2a8eeea435884c45f792f19b11a7ce450917722c9a5639"
+  "hash": "269e12b2f78be39292a69174daa873ac92243a9aaed81155f5cfd5ca21719c04"
  },
  "/en/wines/domaine-de-sabbat-rose/": {
   "date": "2026-10-08",
-  "hash": "aebb32825dda602d8ddf68b057bfe725b259487b534ba49a5389743e8879b147"
+  "hash": "2956401f0421d2adad172f3f87e30245a76a408b8e8cce7c8cc2ed438827bcb2"
  },
  "/en/wines/domaine-de-sabbat-rouge/": {
   "date": "2026-10-08",
-  "hash": "46aecb74cf0b1f6ed7d416203c063018c1f52438ba2e4c4e5846059374395523"
+  "hash": "42312e13750a63e3aa6fbe9a3bc8c4f37a2838aa4de4a009fa54612dbe4e0015"
  },
  "/en/wines/mi-carina/": {
   "date": "2026-10-08",
-  "hash": "bd12d3073c9f668048bb2e20551040c0b971b7305d3848b2460fbd15d3b45798"
+  "hash": "fe08b279752bf42e739e89bc8d62fc70eceec617bed12e0dcb6daae62162049a"
  },
  "/en/wines/natural-born-syrah/": {
   "date": "2026-10-08",
-  "hash": "aea45dadbd3bc2b74a5ac2e31397d719b64d4c3ead209044dffa9dd8cc67ff94"
+  "hash": "ec8f5b3bb9f64ec7575ba4cda922ecb9022acb47fb1f007403a82a40d0ca7331"
  },
  "/en/wines/naughty-by-nature/": {
   "date": "2026-10-08",
-  "hash": "edb17b802214c4bd2e09e5c9c2f6fb613d0263afd15e685c9e4d8ea74417367e"
+  "hash": "76134cfb6333bcc7c273366b8616e55df5c6512491ce27a199e05096f352fad5"
  },
  "/en/wines/rivesaltes-ambre/": {
   "date": "2026-10-08",
-  "hash": "08353f2bdf79805c149929fe5d4d6a8953be292d2d2636f88218bce0d6856a3b"
+  "hash": "e5eb34883554639d8679c5355496b6b055bb9acd28b4181881fe7f480f62dd74"
  },
  "/en/wines/rivesaltes-grenat/": {
   "date": "2026-10-08",
-  "hash": "fd25b248dbc8c69dfbbc0b624c2a082c9907ac3c29fea24af40cbcbfd09e2e44"
+  "hash": "32eacba188f69b3068a9bfc69e627e63e8fcdf8fb2a32085a8e73db491595a81"
  },
  "/en/wines/rivesaltes-tuile/": {
   "date": "2026-10-08",
-  "hash": "4b14ec1dc319081a243602ae417d95cd7fbd1ce8b28b5ef2922da7338e1aa5bf"
+  "hash": "14c54f2256c90990db333c11fd20fca239ecab2a43a00a204651d5f44e5e4c62"
  },
  "/les-acteurs/": {
   "date": "2026-10-08",
-  "hash": "fdaf0a09ddf676d5cc37076b85cde1fc0c159f1e92bd1b238b08ad20057a5e72"
+  "hash": "a6934e185b3bb94778edae5134987b0cc1f1d117158bdff40c8ec9f073329ec6"
  },
  "/les-vins/": {
   "date": "2026-10-08",
-  "hash": "8305d69dfd144ea3ff4643d41656f9a5f8cfb6e39be737543c865d0ab6fd7d14"
+  "hash": "241e46ed0d188eca73c8421238678518834626b9bdafe51173668425c4c67266"
  },
  "/les-vins/100-grenache/": {
   "date": "2026-10-08",
-  "hash": "04b21a419ab96bd6c2da32e4daaed15702716d0b1ce33da31974b011f6d24b2d"
+  "hash": "e591ed03329a69bd7536c75283798a345bdc863aee108f9a6ecb8d6184de484a"
  },
  "/les-vins/cuvee-printemps-1900/": {
   "date": "2026-10-08",
-  "hash": "7593fb2ce8c027b43062ff3ecce15135efdddefbfd6f4e79dfc88a22f263efd7"
+  "hash": "900354cddc267bbfedd08f3357937cc93cf8fefb48382d973b4b0835147333bc"
  },
  "/les-vins/domaine-de-sabbat-blanc/": {
   "date": "2026-10-08",
-  "hash": "7208da80321f0a1945906461a01843a9a3c00bfe4104516de0a78d00dcc9fd02"
+  "hash": "bdb7736aafb2c85c7a31feccff104fa59e50872e3a0c5efa03f892e8437d10f4"
  },
  "/les-vins/domaine-de-sabbat-rose/": {
   "date": "2026-10-08",
-  "hash": "7cf76bb315f9ac9f138d2b31d1e7847954ba43b031c070197f1563dca5dc10e3"
+  "hash": "c8ebe81610236558779681edd21d54f9f3107979409eeca02fa8f2310a8965e5"
  },
  "/les-vins/domaine-de-sabbat-rouge/": {
   "date": "2026-10-08",
-  "hash": "83f6affa1067fcb868c2894f33a3f2ff6631fe8d29ca5f95e2b7b0f9a7a3a13a"
+  "hash": "059018a80f03c221dec9ee36a32946655ab881e2d1b7918b1bc1d26fcfcb27c2"
  },
  "/les-vins/mi-carina/": {
   "date": "2026-10-08",
-  "hash": "ada7c54d03278aba7cf34dee378a373c808d3c425fe510bb9e25c39ffc560ea8"
+  "hash": "575f80fe7c738b0edb3d89cf40470dc99fca690fabfb342b77c42403811e316e"
  },
  "/les-vins/natural-born-syrah/": {
   "date": "2026-10-08",
-  "hash": "93956566c17ab4be1ff62010dd882a78ed49174c57816496f178b214984ac85c"
+  "hash": "967fbdb2dce441658dffb4449f0313cf816651bd6c90a6041db5c7eee8ffac08"
  },
  "/les-vins/naughty-by-nature/": {
   "date": "2026-10-08",
-  "hash": "52e6a5c9261da871ed017e67469e1e223f2e077153e65a807190d504d59ef978"
+  "hash": "80c124d770739952851d570eb3dd200ee3b1a123bd76869c755802ea85819521"
  },
  "/les-vins/rivesaltes-ambre/": {
   "date": "2026-10-08",
-  "hash": "fbb346e1c5599e5149652982bc51afd47444679ea869381a547490b500ca1f96"
+  "hash": "b760775e8035d4ad37ba121a01e89767321366500dcb2220efcb1d84fb940707"
  },
  "/les-vins/rivesaltes-grenat/": {
   "date": "2026-10-08",
-  "hash": "9acdfe0dff23f3da347deb9f468433072f42f6f665bfc47d391299df1c281a42"
+  "hash": "ca335f595863f6a886e4db5a4ff3c5045699609000ce8acde1d1e20f245a3558"
  },
  "/les-vins/rivesaltes-tuile/": {
   "date": "2026-10-08",
-  "hash": "50c295a81a67cdd1c34bad1bbdb600f6eb8d014482d626552e6dbf90fff2dbe5"
+  "hash": "bf8491ae250a5e66d9521af636ad96d1b3e4237283c4ff9cff9215f6c84f7659"
  },
  "/mentions-legales/": {
   "date": "2026-10-08",
-  "hash": "2a12789684412057b906b7a1e00a6f623d41a8b1fca4202d670b01fa17675ec8"
+  "hash": "0889cebf23c5294a25997fc094e51f3f8adca0602d0f235fc68472c3fb0f667b"
  },
  "/oenotourisme/": {
   "date": "2026-10-08",
-  "hash": "3797c1f0c6fbbfb9a350492c954ef4a7204b7d54e9dcf08083b4b45c780fae72"
+  "hash": "b32f15dc9693873cfce15ad868dab9b1fbdb6ae75ffe57180dea7f40cafd8e22"
  },
  "/oenotourisme/vallee-de-l-agly/": {
   "date": "2026-10-08",
-  "hash": "a9cf11a284a1129b529165820009b8a2cb485a6119825b93e655d12f493afd00"
+  "hash": "05d730d1b808f7b74644925532b794784d2d56770c25665043f1d8b7548f30c3"
  },
  "/plan-d-acces/": {
   "date": "2026-10-08",
-  "hash": "d5e9d97fdc4370edbd77f0f814bc2d4739d458d73248716ffd486058819e7ac5"
+  "hash": "81a9fcf86a7b411caa333047297ee7397aefc2781d360d23963f5667339a2b01"
  },
  "/presentation/": {
   "date": "2026-10-08",
-  "hash": "b17799eb7f69aec13439cf775dd30fd1cf0d84bb6ce42af7fa2fcb16dc1efa42"
+  "hash": "e296cc22840dc7d84bed87d1779cf364f393852581b6c0a0eaf13578256a9bf2"
  },
  "/technique/": {
   "date": "2026-10-08",
-  "hash": "a74cd92d0b29c79e5332f387b083865710d040e9dea10166d0cb93616fdfe60f"
+  "hash": "05648cb054f5c0ca9286af75e0717cf89c338adfa677277f73564dddbb064d1d"
  },
  "/technique/cave/": {
   "date": "2026-10-08",
-  "hash": "61bbc58991ab11825db4ba6016a0d08f3a5d313c159489d2380939125b6064eb"
+  "hash": "0bee807b2f8464ace9c1d086b14ba844aba1e4917917606b6156fca69e6e49b4"
  },
  "/technique/terroir/": {
   "date": "2026-10-08",
-  "hash": "004281cffcc2082399d41c79139dec8a097e2038ef5dc800976533875447ba89"
+  "hash": "0125098258046b50de0cfd9c8fd401800236e0e9a1e728848011ee231f84dcbd"
  },
  "/technique/vignoble/": {
   "date": "2026-10-08",
-  "hash": "c13a3a66b1f4dd0d09b66e65a05ceeaab44321beea2506b89b5707186e859227"
+  "hash": "5fe568e212aa40af085312dc12bb9274ff4725f8cce00204b484c869e9024935"
  }
 }

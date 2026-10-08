@@ -62,7 +62,6 @@ URL_EN = {
     "/technique/cave/": "/en/winemaking/cellar/",
     "/les-vins/": "/en/wines/",
     "/les-acteurs/": "/en/the-team/",
-    "/actualite/": "/en/news/",
     "/commander/": "/en/order/",
     "/oenotourisme/": "/en/wine-tasting-roussillon/",
     "/oenotourisme/vallee-de-l-agly/": "/en/agly-valley/",
@@ -299,7 +298,6 @@ NAV = [
     ("Technique", "/technique/"),
     ("Les vins", "/les-vins/"),
     ("Les acteurs", "/les-acteurs/"),
-    ("Actualité", "/actualite/"),
     ("Commander", ORDER_URL),
     ("Contact", "/contact/"),
 ]
@@ -310,7 +308,6 @@ NAV_EN = [
     ("Winemaking", "/en/winemaking/"),
     ("Wines", "/en/wines/"),
     ("The team", "/en/the-team/"),
-    ("News", "/en/news/"),
     ("Order", "/en/order/"),
     ("Contact", "/en/contact/"),
 ]
@@ -443,25 +440,6 @@ def header(current):
 </header>"""
 
 
-def news_band():
-    return f"""
-<section aria-labelledby="band-titre" class="border-t border-ink/10 bg-cream-dark">
-  <div class="container-x grid gap-6 py-12 md:grid-cols-3">
-    <h2 id="band-titre" class="font-serif text-3xl">{L("Actualités", "News")}</h2>
-    <div>
-      <p class="eyebrow">{L("Commander", "Order")}</p>
-      <p class="mt-2 text-lg font-medium">{L("Bon de commande et catalogue des cuvées", "Order form and catalogue of our wines")}</p>
-      <a href="{U(ORDER_URL)}" class="mt-2 inline-block text-wine underline underline-offset-4">{L("Commander nos vins", "Order our wines")}</a>
-    </div>
-    <div>
-      <p class="eyebrow">{L("Les rendez-vous", "Where to find us")}</p>
-      <p class="mt-2 text-lg font-medium">{L("Rendez-vous pour les salons habituels…", "See you at our usual wine fairs…")}</p>
-      <a href="{U("/actualite/")}" class="mt-2 inline-block text-wine underline underline-offset-4">{L("Voir l'actualité", "See the news")}</a>
-    </div>
-  </div>
-</section>"""
-
-
 def footer():
     nav, cta = (NAV_EN, CTA_EN) if LANG == "en" else (NAV, CTA)
     cols = "".join(f'<li><a class="hover:text-cream" href="{h}">{l}</a></li>' for l, h in nav)
@@ -583,7 +561,6 @@ def page(url, title, desc, body, crumbs=None, ld=None, og_image=OG_DEFAULT,
 {crumbs_html(crumbs)}
 {body}
 </main>
-{news_band()}
 {footer()}
 <script src="/assets/main.js" defer></script>
 </body>
@@ -940,7 +917,6 @@ def build_oenotourisme():
         <li class="rounded-xl border border-cream/20 p-3"><span class="block text-cream/60">Langues</span>FR · EN · ES</li>
       </ul>
       <a href="#reserver" class="btn-ochre mt-8">Voir les disponibilités</a>
-      <p class="mt-4 text-sm text-cream/70"><a class="underline underline-offset-4 hover:text-cream" href="/en/wine-tasting-roussillon/" hreflang="en" lang="en">English version</a></p>
     </div>
     {img('visite-embouteillage', "Barriques de chêne et bouteilles fraîchement tirées dans le chai du Domaine de Sabbat", 'mx-auto aspect-[16/10] w-full rounded-2xl object-cover md:aspect-[4/5] md:max-w-sm', eager=True)}
   </div>
@@ -1034,35 +1010,6 @@ def build_agly_guide():
          "Guide de la Vallée de l'Agly autour de Latour-de-France : Maury, Tautavel, Vingrau, châteaux cathares et dégustation de vin nature chez le vigneron.",
          body, crumbs=[("Accueil", "/"), ("Œnotourisme", "/oenotourisme/"), ("Vallée de l'Agly", "/oenotourisme/vallee-de-l-agly/")],
          priority="0.8")
-
-
-def build_news():
-    body = page_hero("Actualité", "Les rendez-vous du domaine")
-    body += f"""<div class="container-x grid gap-6 pb-16 md:grid-cols-2">
-  <article class="rounded-3xl bg-white p-6 ring-1 ring-ink/5 sm:p-8">
-    <p class="eyebrow">Fin d'année 2020</p>
-    <h2 class="mt-2 font-serif text-3xl">Les rendez-vous de fin d'année</h2>
-    <h3 class="mt-6 text-sm font-semibold uppercase tracking-wider text-stone">Salons</h3>
-    <p class="mt-2 leading-relaxed">N'hésitez pas à <a class="text-wine underline" href="/contact/">demander vos invitations ici</a> ! (sous réserve de disponibilité)</p>
-    <h3 class="mt-6 text-sm font-semibold uppercase tracking-wider text-stone">Nouveautés</h3>
-    <ul class="mt-2 space-y-1 leading-relaxed">
-      <li>— <a class="hover:text-wine" href="/les-vins/domaine-de-sabbat-blanc/">Domaine de Sabbat Blanc 2020</a> : disponible !</li>
-      <li>— Lladoner Pelut 2021 : disponible !</li>
-      <li>— <a class="hover:text-wine" href="/les-vins/cuvee-printemps-1900/">Cuvée Printemps 1900' 2018</a></li>
-      <li>— <a class="hover:text-wine" href="/les-vins/naughty-by-nature/">Naughty by Nature 2018</a></li>
-    </ul>
-    <a href="{ORDER_URL}" class="btn-wine mt-8">Commander</a>
-  </article>
-  <article class="rounded-3xl bg-ink p-6 text-cream sm:p-8">
-    <p class="eyebrow !text-ochre-light">Commander</p>
-    <h2 class="mt-2 font-serif text-3xl">Commandez directement au domaine</h2>
-    <p class="mt-4 text-cream/75">Téléchargez le bon de commande, remplissez-le et renvoyez-le-nous par e-mail : nous préparons votre commande et vous confirmons les modalités de livraison.</p>
-    <a href="{ORDER_URL}" class="btn-ochre mt-8">Bon de commande</a>
-  </article>
-</div>"""
-    page("/actualite/", "Actualité — salons, nouveautés et millésimes",
-         "Salons, nouveaux millésimes et offres du Domaine de Sabbat, vigneron bio et nature à Latour-de-France.",
-         body, crumbs=[("Accueil", "/"), ("Actualité", "/actualite/")], priority="0.5")
 
 
 def map_block():
@@ -1214,7 +1161,7 @@ def build_meta_files():
     # Redirections 301 depuis les URL de l'ancien site IONOS (accents encodés).
     from urllib.parse import quote
     redirects = {
-        "/présentation/": "/presentation/", "/actualité/": "/actualite/", "/plan-d-accès/": "/plan-d-acces/",
+        "/présentation/": "/presentation/", "/actualité/": "/", "/actualite/": "/", "/en/news/": "/en/", "/plan-d-accès/": "/plan-d-acces/",
         "/infos-légales/": "/mentions-legales/", "/sitemap/": "/sitemap.xml",
         "/e-boutique/": ORDER_URL, "/visites/": "/oenotourisme/", "/visite/": "/oenotourisme/", "/degustation/": "/oenotourisme/",
     }
@@ -1278,7 +1225,7 @@ def main():
     copy_assets()
     LANG = "fr"
     build_home(); build_presentation(); build_technique(); build_wines(); build_actors()
-    build_oenotourisme(); build_agly_guide(); build_news(); build_order(); build_access(); build_contact(); build_legal(); build_404()
+    build_oenotourisme(); build_agly_guide(); build_order(); build_access(); build_contact(); build_legal(); build_404()
     LANG = "en"
     import en_site_a, en_site_b  # pages anglaises (mêmes gabarits, textes traduits)
     en_site_a.build_all()
